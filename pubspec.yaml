@@ -52,9 +52,6 @@ flutter_icons:
   image_path: "assets/icons/CMGT logo Purple.png"
   web:
     generate: true
-  android: true
-  adaptive_icon_background: "#AD00FF"
-  adaptive_icon_foreground: "assets/icons/CMGT logo White.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
