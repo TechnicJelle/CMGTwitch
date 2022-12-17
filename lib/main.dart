@@ -1,5 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+
+import 'home_page.dart';
+
+const Color background = Color(0xFF121212);
+const Color purple = Color(0xFFAD00FF);
+const Color blue = Color(0xFF11A4E6);
+const Color green = Color(0xFF62C744);
+const Color red = Color(0xFFf03B3B);
+const Color cyan = Color(0xFF009C82);
+const Color white = Color(0xFFFFFFFF);
+const Color black = Color(0xFF000000);
+
+const fontScale = 1.5;
+const TextStyle midnightKernboyTitles = TextStyle(
+  fontFamily: "Midnight Kernboy",
+  color: cyan,
+  fontSize: 24 * fontScale,
+);
+const TextStyle midnightKernboyHeaders = TextStyle(
+  fontFamily: "Midnight Kernboy",
+  color: white,
+  fontSize: 18 * fontScale,
+);
+const TextStyle auto1ImportantBody = TextStyle(
+  fontFamily: "Auto 1",
+  fontStyle: FontStyle.italic,
+  color: white,
+  fontSize: 12 * fontScale,
+);
+const TextStyle auto1NormalBody = TextStyle(
+  fontFamily: "Auto 1",
+  color: white,
+  fontSize: 11 * fontScale,
+);
 
 void main() {
   runApp(const MyApp());
@@ -14,53 +47,13 @@ class MyApp extends StatelessWidget {
       title: "CMGTwitch",
       theme: ThemeData.dark().copyWith(
         colorScheme: const ColorScheme.dark().copyWith(
-          primary: const Color(0xFFAD00FF), //TextField Outline
-          secondary: const Color(0xFFAD00FF), //FAB
-          surface: const Color(0xFF121212), //AppBar
+          primary: purple, //TextField Outline
+          secondary: purple, //FAB
+          surface: background, //AppBar
         ),
-        scaffoldBackgroundColor: const Color(0xFF121212), //Main Background
+        scaffoldBackgroundColor: background, //Main Background
       ),
       home: const MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: SvgPicture.asset(
-          "assets/icons/CMGTwitch.svg",
-          semanticsLabel: "CMGTwitch",
-          height: 56 / 1.5,
-          placeholderBuilder: (_) => Image.asset("assets/icons/CMGTwitch.png"),
-        ),
-        elevation: 8,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text("You have pushed the button this many times:"),
-            Text('$_counter', style: Theme.of(context).textTheme.headline4),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => setState(() => _counter++),
-        tooltip: "Increment",
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }

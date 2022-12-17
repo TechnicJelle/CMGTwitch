@@ -1,0 +1,46 @@
+MIDNIGHT KERNBOY from Sentinel Type, designed by James Arboghast
+
+Hello, and thanks for downloading Midnight Kernboy -- a 21st century interpretation of City.
+
+The slab serif, or egyptienne type style, was introduced around 1815 by Vincent Figgins; at the time it was considered the most brilliant typographic invention of the 19th century, and the style quickly established itself as a favorite for headline and poster work. George Trump's City (1930) marked the end of classicism in Egyptienne type the same year it started -- with the pure geometric forms of Memphis (1930), proving once again that classical periods in art never last long...
+
+Or failing a post-modern ironic sense of humor, one might try to reform the monoline squared egyptienne by restructuring it and selectively knocking off serifs.
+
+Midnight Kernboy avoids City's somewhat homogeneous letter treatment with simplified structures and cunning serif omissions. The result is an elegant semi-serif typeface with a minimalist contemporary feel leaning toward futurism.
+
+
+The Midnight Kernboy package features:
+
+* Regular, Oblique, Bold & Stencil versions
+* Professionally designed commercial quality font(s) 
+* Full punctuation, smart quotes, currency, fractions, superiors etc
+* Accented Western European characters and a few ligatures
+* Fully embeddable for use with Adobe .PDF documents
+
+Extra Characters
+
+Glyph			Cell		Keystroke   PC/MAC
+monocular 'a' 		ascii tilde	SHIFT+6
+Euro			Euro		ALT+0128   OPT+SHIFT2
+OE			OE		ALT+0140   OPT+SHIFT+q
+TM			Trademark	ALT+0153   OPT+h
+oe			OE		ALT+0156   OPT+x
+cent			cent		ALT+0162   OPT+4
+sterling			sterling		ALT+0163   OPT+3
+Euro			currency	ALT+0164   OPT+SHIFT+2
+Yen			yen		ALT+0165   OPT+Y
+alternate 'k'		broken bar	ALT+0166   SHIFT+BACKSLASH
+alternate 'K'		section		ALT+0167   OPT+6
+(c)			copyright	ALT+0169   OPT+g
+(r)			registered	ALT+0174   OPT+r
+AE			AE		ALT+0198   OPT+SHIFT+'
+ae			ae		ALT+0230   OPT+'+a
+
+
+Midnight Kernboy is free for personal use. For use on a commercial design job you must purchase a commercial license, available from www.myfonts.com  Please read the End User License Agreement included in this package for details.
+
+Thanks for taking the time to read, and have fun with Midnight Kernboy.
+
+
+James Arboghast
+25.09.04 Melbourne, Australia
