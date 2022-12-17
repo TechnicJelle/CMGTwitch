@@ -36,7 +36,7 @@ jobs:
         run: flutter pub get
 
       - name: Start Web Release Build
-        run: flutter build web --release
+        run: flutter build web --release --base-href https://technicjelle.com/CMGTwitch/
      
       - name: Upload Web Build Files
         uses: actions/upload-artifact@v3.1.1
