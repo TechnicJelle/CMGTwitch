@@ -44,8 +44,8 @@ jobs:
       with:
         name: web-release
 
-    - name: Deploy to gh-pages
-      uses: peaceiris/actions-gh-pages@v3.1.12
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-github-pages@v3.1.12
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./
