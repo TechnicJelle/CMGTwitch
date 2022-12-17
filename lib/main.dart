@@ -14,9 +14,11 @@ class MyApp extends StatelessWidget {
       title: "CMGTwitch",
       theme: ThemeData.dark().copyWith(
         colorScheme: const ColorScheme.dark().copyWith(
-          primary: Colors.purple,
-          secondary: Colors.purpleAccent,
+          primary: const Color(0xFFAD00FF), //TextField Outline
+          secondary: const Color(0xFFAD00FF), //FAB
+          surface: const Color(0xFF121212), //AppBar
         ),
+        scaffoldBackgroundColor: const Color(0xFF121212), //Main Background
       ),
       home: const MyHomePage(),
     );
@@ -43,6 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
           height: 56 / 1.5,
           placeholderBuilder: (_) => Image.asset("assets/icons/CMGTwitch.png"),
         ),
+        elevation: 8,
       ),
       body: Center(
         child: Column(
