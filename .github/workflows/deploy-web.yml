@@ -6,6 +6,17 @@ on:
 
   pull_request:
     branches: [ "main" ]
+    
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -32,20 +43,24 @@ jobs:
         with:
           name: web-release
           path: ./build/web
-
+  
   deploy:
-    name: Deploy Web Build
-    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-
     steps:
-    - name: Download Web Release
-      uses: actions/download-artifact@v3.0.1
-      with:
-        name: web-release
-
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-github-pages@v3.1.12
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./
+      - name: Download Web Release
+        uses: actions/download-artifact@v3.0.1
+        with:
+          name: web-release
+      - name: Setup Pages
+        uses: actions/configure-pages@v2
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          # Upload entire repository
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
