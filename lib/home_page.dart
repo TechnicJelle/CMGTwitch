@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'main.dart';
+import 'pages/schedule.dart';
+import 'pages/vod.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -11,7 +13,33 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  bool _extended = true;
+  int _selectedIndex = 0;
+
+  final List<NavigationRailDestination> _destinations = const [
+    NavigationRailDestination(
+      icon: Icon(Icons.calendar_month),
+      label: Text("Scheduled Lectures"),
+    ),
+    NavigationRailDestination(
+      icon: Icon(Icons.ondemand_video),
+      label: Text("VOD Lectures"),
+    ),
+  ];
+
+  Widget get _currentPage {
+    switch (_selectedIndex) {
+      case 0:
+        return const Padding(
+          padding: EdgeInsets.only(top: 8.0),
+          child: Schedule(),
+        );
+      case 1:
+        return const VOD();
+      default:
+        return const Placeholder();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,43 +52,32 @@ class _MyHomePageState extends State<MyHomePage> {
           placeholderBuilder: (_) => Image.asset("assets/icons/CMGTwitch.png"),
         ),
         elevation: 8,
-      ),
-      body: DefaultTextStyle(
-        style: auto1NormalBody,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "You have pushed the button this many times:",
-                style: auto1ImportantBody,
-              ),
-              Text('$_counter', style: midnightKernboyHeaders),
-              /*---*/ const Divider() /*---*/,
-              const Text(
-                "Titles: Midnight Kernboy, 24, Bold, 009C82",
-                style: midnightKernboyTitles,
-              ),
-              const Text(
-                "Headers: Midnight Kernboy, 18-14, Bold",
-                style: midnightKernboyHeaders,
-              ),
-              const Text(
-                "Important body text: Auto 1, 12, Italic",
-                style: auto1ImportantBody,
-              ),
-              const Text(
-                "Normal body text: Auto 1, 11, Normal",
-                style: auto1NormalBody,
-              ),
-            ],
-          ),
+        leading: IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: () => setState(() => _extended = !_extended),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => setState(() => _counter++),
-        tooltip: "Increment",
-        child: const Icon(Icons.add),
+      body: Row(
+        children: [
+          NavigationRail(
+            extended: _extended,
+            elevation: 4,
+            destinations: _destinations,
+            selectedIndex: _selectedIndex,
+            onDestinationSelected: (int index) =>
+                setState(() => _selectedIndex = index),
+            selectedLabelTextStyle: auto1NormalBody.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.bold,
+            ),
+            unselectedLabelTextStyle: auto1NormalBody.copyWith(
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+          const VerticalDivider(thickness: 1, width: 1),
+          Expanded(child: _currentPage),
+        ],
       ),
     );
   }
