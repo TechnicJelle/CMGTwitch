@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../main.dart';
@@ -67,7 +68,43 @@ class _ScheduleState extends State<Schedule> {
           leadingDatesTextStyle: monthNonDays,
           trailingDatesTextStyle: monthNonDays,
         ),
+        appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,
+        agendaItemHeight: 70,
+        agendaStyle: const AgendaStyle(
+          appointmentTextStyle: auto1NormalBody,
+          dateTextStyle: auto1ImportantBody,
+          dayTextStyle: midnightKernboyHeaders,
+        ),
       ),
+      appointmentBuilder: (context, CalendarAppointmentDetails details) {
+        final Meeting meeting = details.appointments.first;
+        final DateFormat formatter = DateFormat("HH:mm");
+        final String time =
+            "${formatter.format(meeting.from)} - ${formatter.format(meeting.to)}";
+
+        return Container(
+          decoration: BoxDecoration(
+            color: meeting.background,
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: ListTile(
+            title: Text(
+              meeting.eventName,
+              style: auto1ImportantBody.copyWith(color: Colors.black),
+            ),
+            subtitle: Text(
+              time,
+              style: auto1NormalBody.copyWith(color: Colors.black),
+            ),
+            trailing: OutlinedButton(
+              onPressed: () {
+                print("Button pressed");
+              },
+              child: const Text("Watch"),
+            ),
+          ),
+        );
+      },
     );
   }
 
