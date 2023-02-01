@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+import '../lecture_db.dart';
 import '../main.dart';
 
 class Schedule extends StatefulWidget {
@@ -69,6 +70,7 @@ class _ScheduleState extends State<Schedule> {
           trailingDatesTextStyle: monthNonDays,
         ),
         appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,
+        appointmentDisplayCount: 9,
         agendaItemHeight: 70,
         agendaStyle: const AgendaStyle(
           appointmentTextStyle: auto1NormalBody,
@@ -78,29 +80,59 @@ class _ScheduleState extends State<Schedule> {
       ),
       appointmentBuilder: (context, CalendarAppointmentDetails details) {
         final Meeting meeting = details.appointments.first;
+
         final DateFormat formatter = DateFormat("HH:mm");
         final String time =
             "${formatter.format(meeting.from)} - ${formatter.format(meeting.to)}";
+
+        final bool isNow = DateTime.now().isAfter(meeting.from) &&
+            DateTime.now().isBefore(meeting.to);
 
         return Container(
           decoration: BoxDecoration(
             color: meeting.background,
             borderRadius: BorderRadius.circular(4),
           ),
-          child: ListTile(
-            title: Text(
-              meeting.eventName,
-              style: auto1ImportantBody.copyWith(color: Colors.black),
-            ),
-            subtitle: Text(
-              time,
-              style: auto1NormalBody.copyWith(color: Colors.black),
-            ),
-            trailing: OutlinedButton(
-              onPressed: () {
-                print("Button pressed");
-              },
-              child: const Text("Watch"),
+          child: GestureDetector(
+            onDoubleTap: () {
+              print("Double tap");
+            },
+            child: Stack(
+              children: [
+                ListTile(
+                  title: Text(
+                    meeting.eventName,
+                    softWrap: false,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    style: auto1ImportantBody.copyWith(
+                      color: Colors.white,
+                      height: 1.1,
+                    ),
+                  ),
+                  subtitle: Text(
+                    time + (isNow ? " (Live!)" : ""),
+                    style: auto1NormalBody.copyWith(color: Colors.white70),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: OutlinedButton(
+                      onPressed: () {
+                        print("Button pressed");
+                      },
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: Colors.white70),
+                      ),
+                      child: Text("Watch",
+                          style:
+                              auto1NormalBody.copyWith(color: Colors.white70)),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         );
@@ -109,12 +141,28 @@ class _ScheduleState extends State<Schedule> {
   }
 
   List<Meeting> _getDataSource() {
-    final List<Meeting> meetings = <Meeting>[];
-    final DateTime today = DateTime.now();
-    final DateTime startTime = DateTime(today.year, today.month, today.day, 9);
+    final List<Meeting> meetings = [];
+    for (Course course in courses) {
+      Color colour =
+          course.audience.length == 1 ? course.audience.first.colour : cyan;
+      for (Lecture lecture in course.lectures) {
+        meetings.add(
+          Meeting(
+            "${course.name}\n${lecture.name}",
+            lecture.startTime,
+            lecture.endTime,
+            colour,
+          ),
+        );
+      }
+    }
+
+    //Always have a live lecture
+    final DateTime now = DateTime.now();
+    final DateTime startTime = DateTime(now.year, now.month, now.day, now.hour);
     final DateTime endTime = startTime.add(const Duration(hours: 2));
-    meetings.add(
-        Meeting("UI/UX Advanced Lecture", startTime, endTime, blue, false));
+    meetings.add(Meeting("UI/UX Advanced Lecture", startTime, endTime, cyan));
+
     return meetings;
   }
 }
@@ -149,11 +197,6 @@ class MeetingDataSource extends CalendarDataSource {
     return _getMeetingData(index).background;
   }
 
-  @override
-  bool isAllDay(int index) {
-    return _getMeetingData(index).isAllDay;
-  }
-
   Meeting _getMeetingData(int index) {
     final dynamic meeting = appointments![index];
     late final Meeting meetingData;
@@ -169,7 +212,7 @@ class MeetingDataSource extends CalendarDataSource {
 /// information about the event data which will be rendered in calendar.
 class Meeting {
   /// Creates a meeting class with required details.
-  Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay);
+  Meeting(this.eventName, this.from, this.to, this.background);
 
   /// Event name which is equivalent to subject property of [Appointment].
   String eventName;
@@ -182,7 +225,4 @@ class Meeting {
 
   /// Background which is equivalent to color property of [Appointment].
   Color background;
-
-  /// IsAllDay which is equivalent to isAllDay property of [Appointment].
-  bool isAllDay;
 }
