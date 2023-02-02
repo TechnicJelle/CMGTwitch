@@ -161,7 +161,8 @@ class _ScheduleState extends State<Schedule> {
     final DateTime now = DateTime.now();
     final DateTime startTime = DateTime(now.year, now.month, now.day, now.hour);
     final DateTime endTime = startTime.add(const Duration(hours: 2));
-    meetings.add(Meeting("UI/UX Advanced Lecture", startTime, endTime, cyan));
+    meetings.add(Meeting("UI/UX Advanced\nGo to the end of January",
+      startTime, endTime, cyan));
 
     return meetings;
   }
