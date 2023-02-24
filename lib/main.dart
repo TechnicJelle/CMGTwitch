@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'home_page.dart';
+import 'lecture_db.dart';
 
 const Color background = Color(0xFF121212);
 const Color purple = Color(0xFFAD00FF);
@@ -35,6 +36,14 @@ const TextStyle auto1NormalBody = TextStyle(
 );
 
 void main() {
+  //Always have a live lecture
+  final DateTime now = DateTime.now();
+  final DateTime startTime = DateTime(now.year, now.month, now.day, now.hour);
+  final DateTime endTime = startTime.add(const Duration(hours: 2));
+
+  courses.first.lectures
+      .add(Lecture("Task: Go to Week 5 in the schedule", startTime, endTime));
+
   runApp(const MyApp());
 }
 

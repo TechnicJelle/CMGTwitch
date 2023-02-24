@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../lecture_db.dart';
@@ -80,13 +79,7 @@ class _ScheduleState extends State<Schedule> {
       ),
       appointmentBuilder: (context, CalendarAppointmentDetails details) {
         final Meeting meeting = details.appointments.first;
-
-        final DateFormat formatter = DateFormat("HH:mm");
-        final String time =
-            "${formatter.format(meeting.from)} - ${formatter.format(meeting.to)}";
-
-        final bool isNow = DateTime.now().isAfter(meeting.from) &&
-            DateTime.now().isBefore(meeting.to);
+        final Lecture lecture = meeting.lecture;
 
         return Container(
           decoration: BoxDecoration(
@@ -94,9 +87,7 @@ class _ScheduleState extends State<Schedule> {
             borderRadius: BorderRadius.circular(4),
           ),
           child: GestureDetector(
-            onDoubleTap: () {
-              print("Double tap");
-            },
+            onDoubleTap: () => lecture.watch(),
             child: Stack(
               children: [
                 ListTile(
@@ -105,13 +96,11 @@ class _ScheduleState extends State<Schedule> {
                     softWrap: false,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
-                    style: auto1ImportantBody.copyWith(
-                      color: Colors.white,
-                      height: 1.1,
-                    ),
+                    style:
+                        auto1ImportantBody.copyWith(color: white, height: 1.1),
                   ),
                   subtitle: Text(
-                    time + (isNow ? " (Live!)" : ""),
+                    lecture.time + (lecture.isLive ? " (Live!)" : ""),
                     style: auto1NormalBody.copyWith(color: Colors.white70),
                   ),
                 ),
@@ -120,15 +109,14 @@ class _ScheduleState extends State<Schedule> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: OutlinedButton(
-                      onPressed: () {
-                        print("Button pressed");
-                      },
+                      onPressed: () => lecture.watch(),
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: Colors.white70),
                       ),
-                      child: Text("Watch",
-                          style:
-                              auto1NormalBody.copyWith(color: Colors.white70)),
+                      child: Text(
+                        "Watch",
+                        style: auto1NormalBody.copyWith(color: Colors.white70),
+                      ),
                     ),
                   ),
                 ),
@@ -143,26 +131,12 @@ class _ScheduleState extends State<Schedule> {
   List<Meeting> _getDataSource() {
     final List<Meeting> meetings = [];
     for (Course course in courses) {
-      Color colour =
-          course.audience.length == 1 ? course.audience.first.colour : cyan;
       for (Lecture lecture in course.lectures) {
         meetings.add(
-          Meeting(
-            "${course.name}\n${lecture.name}",
-            lecture.startTime,
-            lecture.endTime,
-            colour,
-          ),
+          Meeting("${course.name}\n${lecture.name}", lecture, course.colour),
         );
       }
     }
-
-    //Always have a live lecture
-    final DateTime now = DateTime.now();
-    final DateTime startTime = DateTime(now.year, now.month, now.day, now.hour);
-    final DateTime endTime = startTime.add(const Duration(hours: 2));
-    meetings.add(Meeting("UI/UX Advanced\nGo to the end of January",
-      startTime, endTime, cyan));
 
     return meetings;
   }
@@ -180,17 +154,17 @@ class MeetingDataSource extends CalendarDataSource {
 
   @override
   DateTime getStartTime(int index) {
-    return _getMeetingData(index).from;
+    return _getMeetingData(index).lecture.startTime;
   }
 
   @override
   DateTime getEndTime(int index) {
-    return _getMeetingData(index).to;
+    return _getMeetingData(index).lecture.endTime;
   }
 
   @override
   String getSubject(int index) {
-    return _getMeetingData(index).eventName;
+    return _getMeetingData(index).lecture.name;
   }
 
   @override
@@ -209,21 +183,10 @@ class MeetingDataSource extends CalendarDataSource {
   }
 }
 
-/// Custom business object class which contains properties to hold the detailed
-/// information about the event data which will be rendered in calendar.
 class Meeting {
-  /// Creates a meeting class with required details.
-  Meeting(this.eventName, this.from, this.to, this.background);
+  Meeting(this.eventName, this.lecture, this.background);
 
-  /// Event name which is equivalent to subject property of [Appointment].
   String eventName;
-
-  /// From which is equivalent to start time property of [Appointment].
-  DateTime from;
-
-  /// To which is equivalent to end time property of [Appointment].
-  DateTime to;
-
-  /// Background which is equivalent to color property of [Appointment].
+  Lecture lecture;
   Color background;
 }

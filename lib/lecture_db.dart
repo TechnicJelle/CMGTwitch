@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:intl/intl.dart';
+
 import 'main.dart';
 
 enum Audience {
@@ -18,7 +20,11 @@ class Course {
   List<Lecture> lectures;
 
   Course(this.name, this.audience, this.lectures);
+
+  Color get colour => audience.length == 1 ? audience.first.colour : cyan;
 }
+
+DateFormat _formatter = DateFormat("HH:mm");
 
 class Lecture {
   String name;
@@ -26,6 +32,40 @@ class Lecture {
   DateTime endTime;
 
   Lecture(this.name, this.startTime, this.endTime);
+
+  bool get isLive =>
+      DateTime.now().isAfter(startTime) && DateTime.now().isBefore(endTime);
+
+  String get time =>
+      "${_formatter.format(startTime)} - ${_formatter.format(endTime)}";
+
+  String get duration {
+    Duration diff = endTime.difference(startTime);
+    return formatDuration(diff);
+  }
+
+  void watch() {
+    print("Watch lecture: $name");
+  }
+}
+
+String formatDuration(Duration d) {
+  int hours = d.inHours;
+  bool hasHours = hours > 0;
+
+  int minutes = d.inMinutes % 60;
+  String minutesString = minutes.toString();
+  if (hasHours) {
+    minutesString = minutesString.padLeft(2, "0");
+  }
+
+  String seconds = (d.inSeconds % 60).toString().padLeft(2, "0");
+
+  if (hasHours) {
+    return "$hours:$minutesString:$seconds";
+  } else {
+    return "$minutes:$seconds";
+  }
 }
 
 List<Course> courses = [
