@@ -11,14 +11,13 @@ class VOD extends StatefulWidget {
 }
 
 class _VODState extends State<VOD> {
+  final TextEditingController _searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Text(
-          "VOD Lectures",
-          style: midnightKernboyTitles,
-        ),
+        buildTopBar(),
         Flexible(
           child: GridView.builder(
             gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -65,4 +64,67 @@ class _VODState extends State<VOD> {
       ),
     );
   }
+
+  Widget buildTopBar() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Flexible(
+            child: Material(
+              borderRadius: BorderRadius.circular(8),
+              child: TextField(
+                style: const TextStyle(color: Colors.white),
+                controller: _searchController,
+                textInputAction: TextInputAction.search,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Theme.of(context).cardColor,
+                  border: const OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                  ),
+                  hintText: "Search",
+                  prefixIcon: const Icon(Icons.search),
+                  contentPadding: const EdgeInsets.all(0),
+                  suffixIcon: _searchController.text.isNotEmpty
+                      ? IconButton(
+                          icon: const Icon(Icons.close),
+                          onPressed: () {
+                            _searchController.clear();
+                            searchItems("");
+                            FocusScope.of(context).unfocus();
+                          },
+                        )
+                      : null,
+                ),
+                onChanged: (String s) => setState(() => searchItems(s)),
+              ),
+            ),
+          ),
+          const SizedBox(width: 3),
+          SizedBox(
+            width: 48,
+            height: 48,
+            child: Tooltip(
+              message: "Sort",
+              child: RawMaterialButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                fillColor: Theme.of(context).cardColor,
+                child: const Icon(Icons.sort),
+                onPressed: () {
+                  // _changeSortDialog(context);
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void searchItems(String s) {}
 }
