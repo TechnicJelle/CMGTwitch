@@ -1,7 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../main.dart';
+import '../lecture_db.dart';
+import '../widgets/lecture_card.dart';
 
 class VOD extends StatefulWidget {
   const VOD({super.key});
@@ -15,53 +16,61 @@ class _VODState extends State<VOD> {
 
   @override
   Widget build(BuildContext context) {
+    List<Lecture> liveLectures = courses
+        .expand((course) => course.lectures)
+        .where((lecture) => lecture.isLive)
+        .toList();
+
     return Column(
       children: [
         buildTopBar(),
         Flexible(
-          child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 500,
-              childAspectRatio: 16 / 9,
-            ),
-            itemCount: 50,
-            itemBuilder: (context, index) => buildImageInteractionCard(index),
+          child: ListView.builder(
+            itemCount: courses.length + 1,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                if (liveLectures.isEmpty) return Container();
+                return buildCustomListItem(
+                    "> Live now!", Colors.red, liveLectures);
+              } else {
+                return buildCourse(courses[index - 1]);
+              }
+            },
           ),
         ),
       ],
     );
   }
 
-  Widget buildImageInteractionCard(int index) {
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          CachedNetworkImage(
-            imageUrl: 'https://picsum.photos/seed/${index + 1}/500',
-            fit: BoxFit.cover,
-            fadeInDuration: const Duration(milliseconds: 200),
-            fadeOutDuration: const Duration(milliseconds: 100),
-            progressIndicatorBuilder: (context, url, progress) => Center(
-              child: CircularProgressIndicator(
-                value: progress.progress,
+  Widget buildCourse(Course course) {
+    return buildCustomListItem(course.name, course.colour, course.lectures);
+  }
+
+  Widget buildCustomListItem(
+      String name, Color colour, List<Lecture> lectures) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 16),
+          child: Text(
+            name,
+            style: midnightKernboyTitles.copyWith(
+              color: colour,
+            ),
+          ),
+        ),
+        Wrap(
+          direction: Axis.horizontal,
+          children: [
+            for (int i = 0; i < lectures.length; i++)
+              SizedBox(
+                width: 500,
+                child: LectureCard(lectures[i]),
               ),
-            ),
-            errorWidget: (context, url, error) => const Icon(Icons.error),
-          ),
-          const Align(
-            alignment: Alignment.bottomCenter,
-            child: Text(
-              'Cats rule the world!',
-              style: midnightKernboyHeaders,
-            ),
-          ),
-        ],
-      ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -75,7 +84,7 @@ class _VODState extends State<VOD> {
             child: Material(
               borderRadius: BorderRadius.circular(8),
               child: TextField(
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: white),
                 controller: _searchController,
                 textInputAction: TextInputAction.search,
                 decoration: InputDecoration(
