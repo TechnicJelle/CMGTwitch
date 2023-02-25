@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:html';
 
 import 'package:flick_video_player/flick_video_player.dart';
@@ -8,6 +9,7 @@ import '../lecture_db.dart';
 import '../main.dart';
 import '../models/chat_message.dart';
 import '../models/lecture.dart';
+import '../models/person.dart';
 
 class VideoPage extends StatefulWidget {
   const VideoPage(this.lecture, {super.key});
@@ -25,6 +27,9 @@ class _VideoPageState extends State<VideoPage> {
 
   final FocusNode _chatFocusNode = FocusNode();
   final TextEditingController _chatController = TextEditingController();
+
+  final ScrollController _chatScrollController = ScrollController();
+  Timer? timer;
 
   @override
   void initState() {
@@ -45,6 +50,19 @@ class _VideoPageState extends State<VideoPage> {
         return const Duration(seconds: 3);
       },
     );
+
+    if (lecture.isLive) {
+      Person spammer = Person(
+        "Random Spammy Person",
+        "https://picsum.photos/seed/${DateTime.now().millisecondsSinceEpoch}/128/128",
+      );
+
+      timer = Timer.periodic(const Duration(seconds: 6), (timer) {
+        DateTime now = DateTime.now();
+        sendChatMessage(ChatMessage("Periodic chat message", spammer, now));
+      });
+      // sendRandomMessage(timer!);
+    }
   }
 
   @override
@@ -53,6 +71,20 @@ class _VideoPageState extends State<VideoPage> {
     flickManager.dispose();
     _chatController.dispose();
     _chatFocusNode.dispose();
+    _chatScrollController.dispose();
+    timer?.cancel();
+  }
+
+  void sendChatMessage(ChatMessage message) {
+    setState(() {
+      lecture.chat.add(message);
+      if (_chatScrollController.position.maxScrollExtent -
+              _chatScrollController.offset <
+          100) {
+        _chatScrollController
+            .jumpTo(_chatScrollController.position.maxScrollExtent + 70);
+      }
+    });
   }
 
   @override
@@ -121,64 +153,74 @@ class _VideoPageState extends State<VideoPage> {
   }
 
   Widget buildChatBox() {
+    List<ChatMessage> chat = lecture.chat;
+
     return SizedBox(
       width: 400,
       child: Column(
         children: [
-          Text(
-            "Chat${lecture.isLive ? "" : " (Replay)"}",
-            style: midnightKernboyHeaders,
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Text(
+              "Chat${lecture.isLive ? "" : " (Replay)"}",
+              style: midnightKernboyHeaders,
+            ),
           ),
           Expanded(
             child: ListView.separated(
-              itemCount: lecture.chat.length,
+              controller: _chatScrollController,
+              itemCount: chat.length,
               itemBuilder: (context, index) {
+                ChatMessage msg = chat[index];
+
                 return ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.blue,
-                    child: Text(
-                      lecture.chat[index].sender.name[0],
-                      style: midnightKernboyHeaders,
+                    leading: msg.sender.avatar,
+                    title: Text(
+                      "${msg.sender.name} ${lecture.speakers.contains(msg.sender) ? " (Speaker)" : ""}",
+                      style: auto1ImportantBody,
                     ),
-                  ),
-                  title: Text(
-                    lecture.chat[index].sender.name,
-                    style: auto1ImportantBody,
-                  ),
-                  subtitle: Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child: Text(
-                      lecture.chat[index].text,
-                      style: auto1NormalBody,
+                    subtitle: Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        msg.text,
+                        style: auto1NormalBody,
+                      ),
                     ),
-                  ),
-                  minVerticalPadding: 0,
-                  trailing: Text(
-                    lecture.chat[index].timeStr,
-                    style: auto1NormalBody.copyWith(color: Colors.grey),
-                  ),
-                );
+                    minVerticalPadding: 6,
+                    trailing: Text(
+                      msg.timeStr,
+                      style: auto1NormalBody.copyWith(color: Colors.grey),
+                    ),
+                    tileColor: (msg.sender == you)
+                        ? Colors.greenAccent[200]?.withOpacity(0.05)
+                        : (lecture.speakers.contains(msg.sender))
+                            ? Colors.blueAccent[200]?.withOpacity(0.1)
+                            : null);
               },
-              separatorBuilder: (context, index) => const Divider(),
+              separatorBuilder: (context, index) => const Divider(height: 0),
             ),
           ),
           if (lecture.isLive)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: _chatController,
-                focusNode: _chatFocusNode,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "Message",
+            Container(
+              color: background,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  controller: _chatController,
+                  focusNode: _chatFocusNode,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: "Message",
+                  ),
+                  onSubmitted: (String msg) {
+                    if (msg.isEmpty) return;
+                    setState(() {
+                      sendChatMessage(ChatMessage(msg, you, DateTime.now()));
+                    });
+                    _chatController.clear();
+                    _chatFocusNode.requestFocus();
+                  },
                 ),
-                onSubmitted: (String msg) {
-                  setState(() {
-                    lecture.chat.add(ChatMessage(msg, you, DateTime.now()));
-                  });
-                  _chatController.clear();
-                  _chatFocusNode.requestFocus();
-                },
               ),
             ),
         ],

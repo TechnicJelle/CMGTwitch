@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../models/lecture.dart';
 import '../main.dart';
+import '../models/person.dart';
 
 class LectureCard extends StatefulWidget {
   const LectureCard(this.lecture, {super.key});
@@ -34,6 +35,7 @@ class _LectureCardState extends State<LectureCard> {
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: buildTitle(),
               ),
+              buildSpeakers(),
             ],
           ),
           Positioned.fill(
@@ -144,4 +146,19 @@ class _LectureCardState extends State<LectureCard> {
           ],
         ),
       );
+
+  Widget buildSpeakers() => Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: Wrap(
+        spacing: 4,
+        children: [
+          for (Person speaker in lecture.speakers)
+            Chip(
+              label: Text(speaker.name,
+                  style: auto1NormalBody.copyWith(color: white)),
+              backgroundColor: black.withOpacity(0.6),
+              avatar: speaker.avatar,
+            ),
+        ],
+      ));
 }

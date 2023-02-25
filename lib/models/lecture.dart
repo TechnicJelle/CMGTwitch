@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../pages/video.dart';
-import 'chat_message.dart';
+import '../models/chat_message.dart';
+import 'person.dart';
 
 DateFormat _timeFormHHmm = DateFormat("HH:mm");
 
@@ -10,10 +11,11 @@ class Lecture {
   String title;
   DateTime startTime;
   DateTime endTime;
+  List<Person> speakers = [];
   List<String> tags = [];
   List<ChatMessage> chat = [];
 
-  Lecture(this.title, this.startTime, this.endTime, {tags, chat})
+  Lecture(this.title, this.startTime, this.endTime, this.speakers, {tags, chat})
       : assert(startTime.isBefore(endTime)),
         assert(startTime != endTime),
         tags = tags ?? [],

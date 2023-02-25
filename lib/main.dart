@@ -55,7 +55,7 @@ void main() {
   final DateTime endTime = startTime.add(const Duration(hours: 2));
 
   courses.first.lectures.add(
-    Lecture("Task: Go to Week 5 in the schedule", startTime, endTime),
+    Lecture("Task: Go to Week 5 in the schedule", startTime, endTime, [you]),
   );
 
   runApp(const MyApp());
