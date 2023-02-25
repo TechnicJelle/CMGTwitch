@@ -35,7 +35,7 @@ class _LectureCardState extends State<LectureCard> {
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
                 child: Text(
                   lecture.name,
-                  style: midnightKernboyHeaders.copyWith(height: 1),
+                  style: midnightKernboyHeaders,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -114,8 +114,7 @@ class _LectureCardState extends State<LectureCard> {
                       )
                     : Text(
                         lecture.duration,
-                        style:
-                            auto1NormalBody.copyWith(color: white, height: 1),
+                        style: auto1NormalBody.copyWith(color: white),
                       ),
                 backgroundColor: black.withOpacity(0.6),
               ),

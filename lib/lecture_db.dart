@@ -24,20 +24,26 @@ class Course {
   Color get colour => audience.length == 1 ? audience.first.colour : cyan;
 }
 
-DateFormat _formatter = DateFormat("HH:mm");
+DateFormat _timeFormHHmm = DateFormat("HH:mm");
+DateFormat _timeFormHHmmss = DateFormat("HH:mm:ss");
 
 class Lecture {
   String name;
   DateTime startTime;
   DateTime endTime;
+  List<ChatMessage> chat = [];
 
-  Lecture(this.name, this.startTime, this.endTime);
+  Lecture(this.name, this.startTime, this.endTime, [chat]) {
+    if (chat != null) {
+      this.chat = chat;
+    }
+  }
 
   bool get isLive =>
       DateTime.now().isAfter(startTime) && DateTime.now().isBefore(endTime);
 
   String get time =>
-      "${_formatter.format(startTime)} - ${_formatter.format(endTime)}";
+      "${_timeFormHHmm.format(startTime)} - ${_timeFormHHmm.format(endTime)}";
 
   String get duration {
     Duration diff = endTime.difference(startTime);
@@ -45,7 +51,6 @@ class Lecture {
   }
 
   void watch(BuildContext context) {
-    print("Watch lecture: $name");
     Navigator.of(context).push(PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => FadeTransition(
         opacity: animation,
@@ -56,6 +61,64 @@ class Lecture {
   }
 }
 
+class ChatMessage {
+  String text;
+  String sender;
+  DateTime time;
+
+  String get timeStr => _timeFormHHmmss.format(time);
+
+  ChatMessage(this.text, this.sender, this.time);
+}
+
+List<ChatMessage> mockChat = [
+  ChatMessage(
+    "Hello!",
+    "John",
+    DateTime(2023, DateTime.january, 30, 9, 00, 00),
+  ),
+  ChatMessage(
+    "Hi!",
+    "Claudia",
+    DateTime(2023, DateTime.january, 30, 9, 00, 10),
+  ),
+  ChatMessage(
+    "How are you?",
+    "John",
+    DateTime(2023, DateTime.january, 30, 9, 00, 20),
+  ),
+  ChatMessage(
+    "I'm fine, thanks!",
+    "Claudia",
+    DateTime(2023, DateTime.january, 30, 9, 00, 30),
+  ),
+  ChatMessage(
+    "What are you doing?",
+    "John",
+    DateTime(2023, DateTime.january, 30, 9, 00, 40),
+  ),
+  ChatMessage(
+    "I'm watching a lecture!",
+    "Claudia",
+    DateTime(2023, DateTime.january, 30, 9, 00, 50),
+  ),
+  ChatMessage(
+    "Cool!",
+    "John",
+    DateTime(2023, DateTime.january, 30, 9, 00, 55),
+  ),
+  ChatMessage(
+    "This is a super long message to test if the text wraps nicely and properly when the chat text messages become too long to just fit on the screen",
+    "Long John",
+    DateTime(2023, DateTime.january, 30, 9, 01, 00),
+  ),
+  ChatMessage(
+    "And sure enough...\nIt does!",
+    "Long John",
+    DateTime(2023, DateTime.january, 30, 9, 01, 05),
+  ),
+];
+
 List<Course> courses = [
   Course(
     "UI/UX Advanced",
@@ -65,6 +128,7 @@ List<Course> courses = [
         "Lecture 1: Buttons and Navigation",
         DateTime(2023, DateTime.january, 30, 9, 00),
         DateTime(2023, DateTime.january, 30, 11, 00),
+        mockChat,
       ),
       Lecture(
         "Lecture 2: How to make your UI look good",

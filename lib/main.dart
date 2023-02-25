@@ -18,22 +18,26 @@ const TextStyle midnightKernboyTitles = TextStyle(
   fontFamily: "Midnight Kernboy",
   color: cyan,
   fontSize: 24 * fontScale,
+  height: 1,
 );
 const TextStyle midnightKernboyHeaders = TextStyle(
   fontFamily: "Midnight Kernboy",
   color: white,
   fontSize: 18 * fontScale,
+  height: 1,
 );
 const TextStyle auto1ImportantBody = TextStyle(
   fontFamily: "Auto 1",
   fontStyle: FontStyle.italic,
   color: white,
   fontSize: 12 * fontScale,
+  height: 1,
 );
 const TextStyle auto1NormalBody = TextStyle(
   fontFamily: "Auto 1",
   color: white,
   fontSize: 11 * fontScale,
+  height: 1,
 );
 
 SvgPicture logoCMGTwitch() => SvgPicture.asset(
@@ -49,8 +53,9 @@ void main() {
   final DateTime startTime = DateTime(now.year, now.month, now.day, now.hour);
   final DateTime endTime = startTime.add(const Duration(hours: 2));
 
-  courses.first.lectures
-      .add(Lecture("Task: Go to Week 5 in the schedule", startTime, endTime));
+  courses.first.lectures.add(
+    Lecture("Task: Go to Week 5 in the schedule", startTime, endTime),
+  );
 
   runApp(const MyApp());
 }

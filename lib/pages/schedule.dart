@@ -30,14 +30,14 @@ class _ScheduleState extends State<Schedule> {
       showNavigationArrow: true,
       // Header (January 2023)
       headerDateFormat: "MMMM yyyy",
-      headerStyle: CalendarHeaderStyle(
-        textStyle: midnightKernboyTitles.copyWith(height: 1.0),
+      headerStyle: const CalendarHeaderStyle(
+        textStyle: midnightKernboyTitles,
       ),
       showDatePickerButton: true,
       // View Header (Days+Dates)
       viewHeaderStyle: ViewHeaderStyle(
         dayTextStyle: midnightKernboyHeaders.copyWith(height: 0.7),
-        dateTextStyle: auto1ImportantBody.copyWith(height: 1.0),
+        dateTextStyle: auto1ImportantBody,
       ),
       // Settings for specific views
       // Day View
