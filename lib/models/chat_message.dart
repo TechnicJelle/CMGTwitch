@@ -1,10 +1,12 @@
 import 'package:intl/intl.dart';
 
+import 'person.dart';
+
 DateFormat _timeFormHHmmss = DateFormat("HH:mm:ss");
 
 class ChatMessage {
   String text;
-  String sender;
+  Person sender;
   DateTime time;
 
   String get timeStr => _timeFormHHmmss.format(time);

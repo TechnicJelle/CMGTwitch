@@ -2,51 +2,57 @@ import 'models/audience.dart';
 import 'models/chat_message.dart';
 import 'models/course.dart';
 import 'models/lecture.dart';
+import 'models/person.dart';
+
+Person you = Person("You");
+Person _john = Person("John");
+Person _claudia = Person("Claudia");
+Person _longJohn = Person("Long John");
 
 List<ChatMessage> _mockChat = [
   ChatMessage(
     "Hello!",
-    "John",
+    _john,
     DateTime(2023, DateTime.january, 30, 9, 00, 00),
   ),
   ChatMessage(
     "Hi!",
-    "Claudia",
+    _claudia,
     DateTime(2023, DateTime.january, 30, 9, 00, 10),
   ),
   ChatMessage(
     "How are you?",
-    "John",
+    _john,
     DateTime(2023, DateTime.january, 30, 9, 00, 20),
   ),
   ChatMessage(
     "I'm fine, thanks!",
-    "Claudia",
+    _claudia,
     DateTime(2023, DateTime.january, 30, 9, 00, 30),
   ),
   ChatMessage(
     "What are you doing?",
-    "John",
+    _john,
     DateTime(2023, DateTime.january, 30, 9, 00, 40),
   ),
   ChatMessage(
     "I'm watching a lecture!",
-    "Claudia",
+    _claudia,
     DateTime(2023, DateTime.january, 30, 9, 00, 50),
   ),
   ChatMessage(
     "Cool!",
-    "John",
+    _john,
     DateTime(2023, DateTime.january, 30, 9, 00, 55),
   ),
   ChatMessage(
     "This is a super long message to test if the text wraps nicely and properly when the chat text messages become too long to just fit on the screen",
-    "Long John",
+    _longJohn,
     DateTime(2023, DateTime.january, 30, 9, 01, 00),
   ),
   ChatMessage(
     "And sure enough...\nIt does!",
-    "Long John",
+    _longJohn,
     DateTime(2023, DateTime.january, 30, 9, 01, 05),
   ),
 ];

@@ -4,6 +4,7 @@ import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
+import '../lecture_db.dart';
 import '../main.dart';
 import '../models/chat_message.dart';
 import '../models/lecture.dart';
@@ -136,12 +137,12 @@ class _VideoPageState extends State<VideoPage> {
                   leading: CircleAvatar(
                     backgroundColor: Colors.blue,
                     child: Text(
-                      lecture.chat[index].sender[0],
+                      lecture.chat[index].sender.name[0],
                       style: midnightKernboyHeaders,
                     ),
                   ),
                   title: Text(
-                    lecture.chat[index].sender,
+                    lecture.chat[index].sender.name,
                     style: auto1ImportantBody,
                   ),
                   subtitle: Padding(
@@ -173,7 +174,7 @@ class _VideoPageState extends State<VideoPage> {
                 ),
                 onSubmitted: (String msg) {
                   setState(() {
-                    lecture.chat.add(ChatMessage(msg, "You", DateTime.now()));
+                    lecture.chat.add(ChatMessage(msg, you, DateTime.now()));
                   });
                   _chatController.clear();
                   _chatFocusNode.requestFocus();

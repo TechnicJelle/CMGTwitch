@@ -31,14 +31,8 @@ class _LectureCardState extends State<LectureCard> {
             children: [
               buildThumbnail(),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
-                child: Text(
-                  lecture.title,
-                  style: midnightKernboyHeaders,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                child: buildTitle(),
               ),
             ],
           ),
@@ -121,5 +115,33 @@ class _LectureCardState extends State<LectureCard> {
             ),
           ),
         ],
+      );
+
+  Widget buildTitle() => Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            lecture.title,
+            style: midnightKernboyHeaders,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          if (lecture.tags.isNotEmpty) buildTags(),
+        ],
+      );
+
+  Widget buildTags() => Padding(
+        padding: const EdgeInsets.only(top: 4, bottom: 2),
+        child: Wrap(
+          spacing: 4,
+          children: [
+            for (String tag in lecture.tags)
+              Chip(
+                label: Text(tag, style: auto1NormalBody.copyWith(color: white)),
+                backgroundColor: black.withOpacity(0.6),
+              ),
+          ],
+        ),
       );
 }
