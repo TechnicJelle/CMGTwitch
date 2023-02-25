@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 
 import 'home_page.dart';
 import 'lecture_db.dart';
+import 'models/lecture.dart';
 
 const Color background = Color(0xFF121212);
 const Color purple = Color(0xFFAD00FF);
@@ -77,24 +78,5 @@ class MyApp extends StatelessWidget {
       ),
       home: const MyHomePage(),
     );
-  }
-}
-
-String formatDuration(Duration d) {
-  int hours = d.inHours;
-  bool hasHours = hours > 0;
-
-  int minutes = d.inMinutes % 60;
-  String minutesString = minutes.toString();
-  if (hasHours) {
-    minutesString = minutesString.padLeft(2, "0");
-  }
-
-  String seconds = (d.inSeconds % 60).toString().padLeft(2, "0");
-
-  if (hasHours) {
-    return "$hours:$minutesString:$seconds";
-  } else {
-    return "$minutes:$seconds";
   }
 }

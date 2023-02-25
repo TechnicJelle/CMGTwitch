@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../lecture_db.dart';
+import '../models/lecture.dart';
 import '../main.dart';
 
 class LectureCard extends StatefulWidget {
@@ -34,7 +34,7 @@ class _LectureCardState extends State<LectureCard> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
                 child: Text(
-                  lecture.name,
+                  lecture.title,
                   style: midnightKernboyHeaders,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

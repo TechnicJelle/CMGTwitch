@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../main.dart';
 import '../lecture_db.dart';
+import '../models/course.dart';
+import '../models/lecture.dart';
 import '../widgets/lecture_card.dart';
 
 class VOD extends StatefulWidget {

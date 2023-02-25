@@ -4,8 +4,9 @@ import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-import '../lecture_db.dart';
 import '../main.dart';
+import '../models/chat_message.dart';
+import '../models/lecture.dart';
 
 class VideoPage extends StatefulWidget {
   const VideoPage(this.lecture, {super.key});
@@ -105,7 +106,7 @@ class _VideoPageState extends State<VideoPage> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    lecture.name,
+                    lecture.title,
                     style: midnightKernboyHeaders,
                   ),
                 ),

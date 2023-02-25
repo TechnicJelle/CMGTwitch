@@ -3,6 +3,8 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../lecture_db.dart';
 import '../main.dart';
+import '../models/course.dart';
+import '../models/lecture.dart';
 
 class Schedule extends StatefulWidget {
   const Schedule({super.key});
@@ -78,7 +80,7 @@ class _ScheduleState extends State<Schedule> {
         ),
       ),
       appointmentBuilder: (context, CalendarAppointmentDetails details) {
-        final Meeting meeting = details.appointments.first;
+        final _Meeting meeting = details.appointments.first;
         final Lecture lecture = meeting.lecture;
 
         return Container(
@@ -128,12 +130,12 @@ class _ScheduleState extends State<Schedule> {
     );
   }
 
-  List<Meeting> _getDataSource() {
-    final List<Meeting> meetings = [];
+  List<_Meeting> _getDataSource() {
+    final List<_Meeting> meetings = [];
     for (Course course in courses) {
       for (Lecture lecture in course.lectures) {
         meetings.add(
-          Meeting("${course.name}\n${lecture.name}", lecture, course.colour),
+          _Meeting("${course.name}\n${lecture.title}", lecture, course.colour),
         );
       }
     }
@@ -148,7 +150,7 @@ class _ScheduleState extends State<Schedule> {
 class MeetingDataSource extends CalendarDataSource {
   /// Creates a meeting data source, which used to set the appointment
   /// collection to the calendar
-  MeetingDataSource(List<Meeting> source) {
+  MeetingDataSource(List<_Meeting> source) {
     appointments = source;
   }
 
@@ -164,7 +166,7 @@ class MeetingDataSource extends CalendarDataSource {
 
   @override
   String getSubject(int index) {
-    return _getMeetingData(index).lecture.name;
+    return _getMeetingData(index).lecture.title;
   }
 
   @override
@@ -172,10 +174,10 @@ class MeetingDataSource extends CalendarDataSource {
     return _getMeetingData(index).background;
   }
 
-  Meeting _getMeetingData(int index) {
+  _Meeting _getMeetingData(int index) {
     final dynamic meeting = appointments![index];
-    late final Meeting meetingData;
-    if (meeting is Meeting) {
+    late final _Meeting meetingData;
+    if (meeting is _Meeting) {
       meetingData = meeting;
     }
 
@@ -183,8 +185,8 @@ class MeetingDataSource extends CalendarDataSource {
   }
 }
 
-class Meeting {
-  Meeting(this.eventName, this.lecture, this.background);
+class _Meeting {
+  _Meeting(this.eventName, this.lecture, this.background);
 
   String eventName;
   Lecture lecture;

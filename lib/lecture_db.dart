@@ -1,77 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'models/audience.dart';
+import 'models/chat_message.dart';
+import 'models/course.dart';
+import 'models/lecture.dart';
 
-import 'main.dart';
-import 'pages/video.dart';
-
-enum Audience {
-  engineer(blue),
-  artist(red),
-  designer(green);
-
-  const Audience(this.colour);
-
-  final Color colour;
-}
-
-class Course {
-  String name;
-  List<Audience> audience;
-  List<Lecture> lectures;
-
-  Course(this.name, this.audience, this.lectures);
-
-  Color get colour => audience.length == 1 ? audience.first.colour : cyan;
-}
-
-DateFormat _timeFormHHmm = DateFormat("HH:mm");
-DateFormat _timeFormHHmmss = DateFormat("HH:mm:ss");
-
-class Lecture {
-  String name;
-  DateTime startTime;
-  DateTime endTime;
-  List<ChatMessage> chat = [];
-
-  Lecture(this.name, this.startTime, this.endTime, [chat]) {
-    if (chat != null) {
-      this.chat = chat;
-    }
-  }
-
-  bool get isLive =>
-      DateTime.now().isAfter(startTime) && DateTime.now().isBefore(endTime);
-
-  String get time =>
-      "${_timeFormHHmm.format(startTime)} - ${_timeFormHHmm.format(endTime)}";
-
-  String get duration {
-    Duration diff = endTime.difference(startTime);
-    return formatDuration(diff);
-  }
-
-  void watch(BuildContext context) {
-    Navigator.of(context).push(PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => FadeTransition(
-        opacity: animation,
-        child: VideoPage(this),
-      ),
-      transitionDuration: const Duration(milliseconds: 100),
-    ));
-  }
-}
-
-class ChatMessage {
-  String text;
-  String sender;
-  DateTime time;
-
-  String get timeStr => _timeFormHHmmss.format(time);
-
-  ChatMessage(this.text, this.sender, this.time);
-}
-
-List<ChatMessage> mockChat = [
+List<ChatMessage> _mockChat = [
   ChatMessage(
     "Hello!",
     "John",
@@ -128,7 +60,8 @@ List<Course> courses = [
         "Lecture 1: Buttons and Navigation",
         DateTime(2023, DateTime.january, 30, 9, 00),
         DateTime(2023, DateTime.january, 30, 11, 00),
-        mockChat,
+        chat: _mockChat,
+        tags: ["Buttons", "Navigation", "UI/UX"],
       ),
       Lecture(
         "Lecture 2: How to make your UI look good",
