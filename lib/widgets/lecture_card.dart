@@ -46,7 +46,7 @@ class _LectureCardState extends State<LectureCard> {
             child: Material(
               color: Colors.transparent,
               child: InkWell(
-                onTap: () => lecture.watch(),
+                onTap: () => lecture.watch(context),
                 onHover: (isHovering) =>
                     setState(() => _isHovering = isHovering),
               ),

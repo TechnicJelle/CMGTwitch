@@ -87,7 +87,7 @@ class _ScheduleState extends State<Schedule> {
             borderRadius: BorderRadius.circular(4),
           ),
           child: GestureDetector(
-            onDoubleTap: () => lecture.watch(),
+            onDoubleTap: () => lecture.watch(context),
             child: Stack(
               children: [
                 ListTile(
@@ -109,7 +109,7 @@ class _ScheduleState extends State<Schedule> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: OutlinedButton(
-                      onPressed: () => lecture.watch(),
+                      onPressed: () => lecture.watch(context),
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: Colors.white70),
                       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'home_page.dart';
 import 'lecture_db.dart';
@@ -35,6 +36,13 @@ const TextStyle auto1NormalBody = TextStyle(
   fontSize: 11 * fontScale,
 );
 
+SvgPicture logoCMGTwitch() => SvgPicture.asset(
+      "assets/icons/CMGTwitch.svg",
+      semanticsLabel: "CMGTwitch",
+      height: 56 / 1.5,
+      placeholderBuilder: (_) => Image.asset("assets/icons/CMGTwitch.png"),
+    );
+
 void main() {
   //Always have a live lecture
   final DateTime now = DateTime.now();
@@ -64,5 +72,24 @@ class MyApp extends StatelessWidget {
       ),
       home: const MyHomePage(),
     );
+  }
+}
+
+String formatDuration(Duration d) {
+  int hours = d.inHours;
+  bool hasHours = hours > 0;
+
+  int minutes = d.inMinutes % 60;
+  String minutesString = minutes.toString();
+  if (hasHours) {
+    minutesString = minutesString.padLeft(2, "0");
+  }
+
+  String seconds = (d.inSeconds % 60).toString().padLeft(2, "0");
+
+  if (hasHours) {
+    return "$hours:$minutesString:$seconds";
+  } else {
+    return "$minutes:$seconds";
   }
 }

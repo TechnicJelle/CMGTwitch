@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 import 'main.dart';
 import 'pages/schedule.dart';
@@ -45,12 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: SvgPicture.asset(
-          "assets/icons/CMGTwitch.svg",
-          semanticsLabel: "CMGTwitch",
-          height: 56 / 1.5,
-          placeholderBuilder: (_) => Image.asset("assets/icons/CMGTwitch.png"),
-        ),
+        title: logoCMGTwitch(),
         elevation: 8,
         leading: IconButton(
           icon: const Icon(Icons.menu),

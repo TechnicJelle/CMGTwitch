@@ -1,8 +1,8 @@
-import 'dart:ui';
-
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'main.dart';
+import 'pages/video.dart';
 
 enum Audience {
   engineer(blue),
@@ -44,27 +44,15 @@ class Lecture {
     return formatDuration(diff);
   }
 
-  void watch() {
+  void watch(BuildContext context) {
     print("Watch lecture: $name");
-  }
-}
-
-String formatDuration(Duration d) {
-  int hours = d.inHours;
-  bool hasHours = hours > 0;
-
-  int minutes = d.inMinutes % 60;
-  String minutesString = minutes.toString();
-  if (hasHours) {
-    minutesString = minutesString.padLeft(2, "0");
-  }
-
-  String seconds = (d.inSeconds % 60).toString().padLeft(2, "0");
-
-  if (hasHours) {
-    return "$hours:$minutesString:$seconds";
-  } else {
-    return "$minutes:$seconds";
+    Navigator.of(context).push(PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => FadeTransition(
+        opacity: animation,
+        child: VideoPage(this),
+      ),
+      transitionDuration: const Duration(milliseconds: 100),
+    ));
   }
 }
 
