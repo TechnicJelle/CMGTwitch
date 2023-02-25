@@ -162,7 +162,7 @@ class _VideoPageState extends State<VideoPage> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Text(
-              "Chat${lecture.isLive ? "" : " (Replay)"}",
+              lecture.isLive ? "Live Chat" : "Chat (Replay)",
               style: midnightKernboyHeaders,
             ),
           ),
