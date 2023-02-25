@@ -33,7 +33,7 @@ class _VODState extends State<VOD> {
               if (index == 0) {
                 if (liveLectures.isEmpty) return Container();
                 return buildCustomListItem(
-                    "> Live now!", Colors.red, liveLectures);
+                    "> Live now!", const Color(0xFFFF0000), liveLectures);
               } else {
                 return buildCourse(courses[index - 1]);
               }
