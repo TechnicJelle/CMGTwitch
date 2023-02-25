@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 
 import 'home_page.dart';
 import 'lecture_db.dart';
+import 'models/chat_message.dart';
 import 'models/lecture.dart';
 
 const Color background = Color(0xFF121212);
@@ -55,7 +56,16 @@ void main() {
   final DateTime endTime = startTime.add(const Duration(hours: 2));
 
   courses.first.lectures.add(
-    Lecture("Task: Go to Week 5 in the schedule", startTime, endTime, [you]),
+    Lecture(
+      "Task: Go to Week 5 in the schedule",
+      startTime,
+      endTime,
+      [you],
+      chat: [
+        ChatMessage("This message was totally sent earlier", you, startTime),
+        ChatMessage("..and so was this one", you, startTime),
+      ],
+    ),
   );
 
   runApp(const MyApp());
