@@ -56,9 +56,7 @@ class _VideoPageState extends State<VideoPage> {
       // and after that, send a periodic "spam" message.
       Person spammer = Person(
         "Random Spammy Person",
-        "https://picsum.photos/seed/${DateTime
-            .now()
-            .millisecondsSinceEpoch}/128/128",
+        "https://picsum.photos/seed/${DateTime.now().millisecondsSinceEpoch}/128/128",
       );
 
       timer = Timer(const Duration(seconds: 1), () {
@@ -94,7 +92,7 @@ class _VideoPageState extends State<VideoPage> {
               _chatScrollController.offset <
           100) {
         _chatScrollController
-            .jumpTo(_chatScrollController.position.maxScrollExtent + 70);
+            .jumpTo(_chatScrollController.position.maxScrollExtent);
       }
     });
   }
