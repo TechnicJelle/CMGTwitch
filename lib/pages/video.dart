@@ -177,60 +177,60 @@ class _VideoPageState extends State<VideoPage> {
             ),
           ),
           Expanded(
-            child: ListView.separated(
-              controller: _chatScrollController,
-              itemCount: chat.length,
-              itemBuilder: (context, index) {
-                ChatMessage msg = chat[index];
+            child: Material(
+              type: MaterialType.transparency,
+              child: ListView.separated(
+                controller: _chatScrollController,
+                itemCount: chat.length,
+                itemBuilder: (context, index) {
+                  ChatMessage msg = chat[index];
 
-                return ListTile(
-                    leading: msg.sender.avatar,
-                    title: Text(
-                      "${msg.sender.name} ${lecture.speakers.contains(msg.sender) ? " (Speaker)" : ""}",
-                      style: auto1ImportantBody,
-                    ),
-                    subtitle: Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Text(
-                        msg.text,
-                        style: auto1NormalBody,
+                  return ListTile(
+                      leading: msg.sender.avatar,
+                      title: Text(
+                        "${msg.sender.name} ${lecture.speakers.contains(msg.sender) ? " (Speaker)" : ""}",
+                        style: auto1ImportantBody,
                       ),
-                    ),
-                    minVerticalPadding: 6,
-                    trailing: Text(
-                      msg.timeStr,
-                      style: auto1NormalBody.copyWith(color: Colors.grey),
-                    ),
-                    tileColor: (msg.sender == you)
-                        ? Colors.greenAccent[200]?.withOpacity(0.05)
-                        : (lecture.speakers.contains(msg.sender))
-                            ? Colors.blueAccent[200]?.withOpacity(0.1)
-                            : null);
-              },
-              separatorBuilder: (context, index) => const Divider(height: 0),
+                      subtitle: Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Text(
+                          msg.text,
+                          style: auto1NormalBody,
+                        ),
+                      ),
+                      minVerticalPadding: 6,
+                      trailing: Text(
+                        msg.timeStr,
+                        style: auto1NormalBody.copyWith(color: Colors.grey),
+                      ),
+                      tileColor: (msg.sender == you)
+                          ? Colors.greenAccent[200]?.withOpacity(0.05)
+                          : (lecture.speakers.contains(msg.sender))
+                              ? Colors.blueAccent[200]?.withOpacity(0.1)
+                              : null);
+                },
+                separatorBuilder: (context, index) => const Divider(height: 0),
+              ),
             ),
           ),
           if (lecture.isLive)
-            Container(
-              color: background,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  controller: _chatController,
-                  focusNode: _chatFocusNode,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "Message",
-                  ),
-                  onSubmitted: (String msg) {
-                    if (msg.isEmpty) return;
-                    setState(() {
-                      sendChatMessage(ChatMessage(msg, you, DateTime.now()));
-                    });
-                    _chatController.clear();
-                    _chatFocusNode.requestFocus();
-                  },
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: _chatController,
+                focusNode: _chatFocusNode,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: "Message",
                 ),
+                onSubmitted: (String msg) {
+                  if (msg.isEmpty) return;
+                  setState(() {
+                    sendChatMessage(ChatMessage(msg, you, DateTime.now()));
+                  });
+                  _chatController.clear();
+                  _chatFocusNode.requestFocus();
+                },
               ),
             ),
         ],
