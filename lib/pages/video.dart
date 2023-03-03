@@ -52,15 +52,27 @@ class _VideoPageState extends State<VideoPage> {
     );
 
     if (lecture.isLive) {
+      //Send a welcome message when the user joins,
+      // and after that, send a periodic "spam" message.
       Person spammer = Person(
         "Random Spammy Person",
-        "https://picsum.photos/seed/${DateTime.now().millisecondsSinceEpoch}/128/128",
+        "https://picsum.photos/seed/${DateTime
+            .now()
+            .millisecondsSinceEpoch}/128/128",
       );
 
-      timer = Timer.periodic(const Duration(seconds: 6), (timer) {
-        DateTime now = DateTime.now();
-        sendChatMessage(ChatMessage("Periodic chat message", spammer, now));
+      timer = Timer(const Duration(seconds: 1), () {
+        sendChatMessage(
+            ChatMessage("Welcome to the lecture!", spammer, DateTime.now()));
+        int count = 1;
+        timer = Timer.periodic(const Duration(seconds: 6), (timer) {
+          DateTime now = DateTime.now();
+          sendChatMessage(
+              ChatMessage("Periodic chat message $count", spammer, now));
+          count++;
+        });
       });
+
       // sendRandomMessage(timer!);
     }
   }
