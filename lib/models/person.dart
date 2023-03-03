@@ -5,13 +5,14 @@ import '../main.dart';
 class Person {
   String name;
   String? avatarUrl;
+  ImageProvider? imgProv;
 
   Person(this.name, [this.avatarUrl]);
 
-  CircleAvatar get avatar => avatarUrl == null
+  CircleAvatar get avatar => avatarUrl == null && imgProv == null
       ? CircleAvatar(
           backgroundColor: Colors.blue,
           child: Text(name[0], style: midnightKernboyHeaders),
         )
-      : CircleAvatar(backgroundImage: NetworkImage(avatarUrl!));
+      : CircleAvatar(backgroundImage: imgProv ?? NetworkImage(avatarUrl!));
 }
