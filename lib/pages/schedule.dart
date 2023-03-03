@@ -21,7 +21,7 @@ class _ScheduleState extends State<Schedule> {
   @override
   Widget build(BuildContext context) {
     return SfCalendar(
-      dataSource: MeetingDataSource(_getDataSource()),
+      dataSource: _MeetingDataSource(_getDataSource()),
       view: CalendarView.workWeek,
       allowedViews: const [
         CalendarView.day,
@@ -140,6 +140,18 @@ class _ScheduleState extends State<Schedule> {
       }
     }
 
+    //Point user to some actual planned lectures
+    final DateTime now = DateTime.now();
+    final DateTime startTime = DateTime(now.year, now.month, now.day, 10);
+    final DateTime endTime = startTime.add(const Duration(hours: 2));
+    meetings.add(
+      _Meeting(
+        "Task: Go to the end of January and watch a lecture",
+        Lecture("Not this lecture ;)", startTime, endTime, [you]),
+        cyan,
+      ),
+    );
+
     return meetings;
   }
 }
@@ -147,10 +159,10 @@ class _ScheduleState extends State<Schedule> {
 /// An object to set the appointment collection data source to calendar, which
 /// used to map the custom appointment data to the calendar appointment, and
 /// allows to add, remove or reset the appointment collection.
-class MeetingDataSource extends CalendarDataSource {
+class _MeetingDataSource extends CalendarDataSource {
   /// Creates a meeting data source, which used to set the appointment
   /// collection to the calendar
-  MeetingDataSource(List<_Meeting> source) {
+  _MeetingDataSource(List<_Meeting> source) {
     appointments = source;
   }
 

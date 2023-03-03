@@ -57,7 +57,7 @@ void main() {
 
   courses.first.lectures.add(
     Lecture(
-      "Task: Go to Week 5 in the schedule",
+      "Lecture 4: Demonstration: How to make a Twitch/YouTube clone in Flutter",
       startTime,
       endTime,
       [you],
