@@ -137,6 +137,7 @@ class _LectureCardState extends State<LectureCard> {
         padding: const EdgeInsets.only(top: 4, bottom: 2),
         child: Wrap(
           spacing: 4,
+          runSpacing: 4,
           children: [
             for (String tag in lecture.tags)
               Chip(
@@ -151,6 +152,7 @@ class _LectureCardState extends State<LectureCard> {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: Wrap(
         spacing: 4,
+        runSpacing: 4,
         children: [
           for (Person speaker in lecture.speakers)
             Chip(

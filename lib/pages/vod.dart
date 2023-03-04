@@ -4,6 +4,7 @@ import '../main.dart';
 import '../lecture_db.dart';
 import '../models/course.dart';
 import '../models/lecture.dart';
+import '../widgets/filter_sidebar.dart';
 import '../widgets/lecture_card.dart';
 
 class VOD extends StatefulWidget {
@@ -15,33 +16,59 @@ class VOD extends StatefulWidget {
 
 class _VODState extends State<VOD> {
   final TextEditingController _searchController = TextEditingController();
+  bool _filterPanelExpanded = false;
+  final FilterSidebar _filterSidebar = FilterSidebar();
 
   @override
   Widget build(BuildContext context) {
-    List<Lecture> liveLectures = courses
-        .expand((course) => course.lectures)
-        .where((lecture) => lecture.isLive)
-        .toList();
-
-    return Column(
+    return Row(
       children: [
-        buildTopBar(),
-        Flexible(
-          child: ListView.builder(
-            itemCount: courses.length + 1,
-            itemBuilder: (context, index) {
-              if (index == 0) {
-                if (liveLectures.isEmpty) return Container();
-                return buildCustomListItem(
-                    "> Live now!", const Color(0xFFFF0000), liveLectures);
-              } else {
-                return buildCourse(courses[index - 1]);
-              }
-            },
+        Expanded(
+          child: Column(
+            children: [
+              buildTopBar(),
+              Flexible(
+                child: buildContent(),
+              ),
+            ],
           ),
         ),
+        if (_filterPanelExpanded) _filterSidebar,
       ],
     );
+  }
+
+  Widget buildContent() {
+    if (_filterSidebar.filterActive) {
+      List<Lecture> filteredLectures = _filterSidebar.filterLectures();
+      if (filteredLectures.isEmpty) {
+        return const Center(
+          child: Text("No lectures found", style: auto1NormalBody),
+        );
+      } else {
+        return ListView(children: [
+          buildCustomListItem("Filter results", cyan, filteredLectures),
+        ]);
+      }
+    } else {
+      List<Lecture> liveLectures = courses
+          .expand((course) => course.lectures)
+          .where((lecture) => lecture.isLive)
+          .toList();
+
+      return ListView.builder(
+        itemCount: courses.length + 1,
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            if (liveLectures.isEmpty) return Container();
+            return buildCustomListItem(
+                "> Live now!", const Color(0xFFFF0000), liveLectures);
+          } else {
+            return buildCourse(courses[index - 1]);
+          }
+        },
+      );
+    }
   }
 
   Widget buildCourse(Course course) {
@@ -86,7 +113,7 @@ class _VODState extends State<VOD> {
             child: Material(
               borderRadius: BorderRadius.circular(8),
               child: TextField(
-                style: const TextStyle(color: white),
+                style: auto1NormalBody,
                 controller: _searchController,
                 textInputAction: TextInputAction.search,
                 decoration: InputDecoration(
@@ -97,6 +124,8 @@ class _VODState extends State<VOD> {
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                   ),
                   hintText: "Search",
+                  hintStyle:
+                      auto1NormalBody.copyWith(color: const Color(0xFFC9C9C9)),
                   prefixIcon: const Icon(Icons.search),
                   contentPadding: const EdgeInsets.all(0),
                   suffixIcon: _searchController.text.isNotEmpty
@@ -119,15 +148,17 @@ class _VODState extends State<VOD> {
             width: 48,
             height: 48,
             child: Tooltip(
-              message: "Sort",
+              message: "Filter (${_filterSidebar.filterActive ? "On" : "Off"})",
               child: RawMaterialButton(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
                 fillColor: Theme.of(context).cardColor,
-                child: const Icon(Icons.sort),
+                child: _filterSidebar.filterActive
+                    ? const Icon(Icons.filter_alt)
+                    : const Icon(Icons.filter_alt_off),
                 onPressed: () {
-                  // _changeSortDialog(context);
+                  setState(() => _filterPanelExpanded = !_filterPanelExpanded);
                 },
               ),
             ),
