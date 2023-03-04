@@ -1,9 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
+import "package:cached_network_image/cached_network_image.dart";
+import "package:flutter/material.dart";
 
-import '../models/lecture.dart';
-import '../main.dart';
-import '../models/person.dart';
+import "../models/lecture.dart";
+import "../main.dart";
+import "../models/person.dart";
 
 class LectureCard extends StatefulWidget {
   const LectureCard(this.lecture, {super.key});
@@ -43,7 +43,7 @@ class _LectureCardState extends State<LectureCard> {
               color: Colors.transparent,
               child: InkWell(
                 onTap: () => lecture.watch(context),
-                onHover: (isHovering) =>
+                onHover: (bool isHovering) =>
                     setState(() => _isHovering = isHovering),
               ),
             ),
@@ -57,11 +57,11 @@ class _LectureCardState extends State<LectureCard> {
         alignment: Alignment.center,
         children: [
           CachedNetworkImage(
-            imageUrl: 'https://picsum.photos/seed/${lecture.hashCode}/800/450',
+            imageUrl: "https://picsum.photos/seed/${lecture.hashCode}/800/450",
             fit: BoxFit.cover,
             fadeInDuration: const Duration(milliseconds: 200),
             fadeOutDuration: const Duration(milliseconds: 100),
-            progressIndicatorBuilder: (context, url, progress) {
+            progressIndicatorBuilder: (context, String url, progress) {
               return SizedBox(
                 height: 280,
                 width: double.infinity,
@@ -75,7 +75,7 @@ class _LectureCardState extends State<LectureCard> {
                 ),
               );
             },
-            errorWidget: (context, url, error) {
+            errorWidget: (context, String url, error) {
               print(error);
               return const SizedBox(
                 height: 280,

@@ -1,8 +1,8 @@
-import 'models/audience.dart';
-import 'models/chat_message.dart';
-import 'models/course.dart';
-import 'models/lecture.dart';
-import 'models/person.dart';
+import "models/audience.dart";
+import "models/chat_message.dart";
+import "models/course.dart";
+import "models/lecture.dart";
+import "models/person.dart";
 
 Person you = Person("You");
 

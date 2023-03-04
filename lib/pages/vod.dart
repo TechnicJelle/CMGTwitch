@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import '../main.dart';
-import '../lecture_db.dart';
-import '../models/course.dart';
-import '../models/lecture.dart';
-import '../widgets/filter_sidebar.dart';
-import '../widgets/lecture_card.dart';
+import "../main.dart";
+import "../lecture_db.dart";
+import "../models/course.dart";
+import "../models/lecture.dart";
+import "../widgets/filter_sidebar.dart";
+import "../widgets/lecture_card.dart";
 
 class VOD extends StatefulWidget {
   const VOD({super.key});

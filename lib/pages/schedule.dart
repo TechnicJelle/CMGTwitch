@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
+import "package:flutter/material.dart";
+import "package:syncfusion_flutter_calendar/calendar.dart";
 
-import '../lecture_db.dart';
-import '../main.dart';
-import '../models/course.dart';
-import '../models/lecture.dart';
+import "../lecture_db.dart";
+import "../main.dart";
+import "../models/course.dart";
+import "../models/lecture.dart";
 
 class Schedule extends StatefulWidget {
   const Schedule({super.key});

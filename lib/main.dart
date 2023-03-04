@@ -1,13 +1,13 @@
-import 'dart:typed_data';
+import "dart:typed_data";
 
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:image_picker_web/image_picker_web.dart';
+import "package:flutter/material.dart";
+import "package:flutter_svg/svg.dart";
+import "package:image_picker_web/image_picker_web.dart";
 
-import 'home_page.dart';
-import 'lecture_db.dart';
-import 'models/chat_message.dart';
-import 'models/lecture.dart';
+import "home_page.dart";
+import "lecture_db.dart";
+import "models/chat_message.dart";
+import "models/lecture.dart";
 
 const Color background = Color(0xFF121212);
 const Color purple = Color(0xFFAD00FF);

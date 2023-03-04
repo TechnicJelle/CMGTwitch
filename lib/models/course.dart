@@ -1,8 +1,8 @@
-import 'dart:ui';
+import "dart:ui";
 
-import '../main.dart';
-import 'audience.dart';
-import 'lecture.dart';
+import "../main.dart";
+import "audience.dart";
+import "lecture.dart";
 
 class Course {
   String name;

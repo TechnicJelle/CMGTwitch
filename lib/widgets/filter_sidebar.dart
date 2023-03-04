@@ -1,12 +1,12 @@
-import 'dart:collection';
+import "dart:collection";
 
-import 'package:cmgtwitch/models/audience.dart';
-import 'package:cmgtwitch/models/course.dart';
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import '../lecture_db.dart';
-import '../main.dart';
-import '../models/lecture.dart';
+import "../lecture_db.dart";
+import "../main.dart";
+import "../models/course.dart";
+import "../models/audience.dart";
+import "../models/lecture.dart";
 
 class FilterSidebar extends StatefulWidget {
   final _FilterStatus _status = _FilterStatus();

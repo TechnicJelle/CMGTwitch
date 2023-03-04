@@ -1,6 +1,6 @@
-import 'package:intl/intl.dart';
+import "package:intl/intl.dart";
 
-import 'person.dart';
+import "person.dart";
 
 DateFormat _timeFormHHmmss = DateFormat("HH:mm:ss");
 

@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import "package:flutter/material.dart";
+import "package:intl/intl.dart";
 
-import '../pages/video.dart';
-import '../models/chat_message.dart';
-import 'person.dart';
+import "../pages/video.dart";
+import "../models/chat_message.dart";
+import "person.dart";
 
 DateFormat _timeFormHHmm = DateFormat("HH:mm");
 
