@@ -1,76 +1,53 @@
-import "dart:collection";
-
 import "package:flutter/material.dart";
+import "package:equatable/equatable.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
 
-import "../lecture_db.dart";
 import "../main.dart";
-import "../models/course.dart";
-import "../models/audience.dart";
-import "../models/lecture.dart";
 
-class FilterSidebar extends StatefulWidget {
-  final _FilterStatus _status = _FilterStatus();
+final filterStatusProvider =
+    StateProvider<FilterStatus>((_) => const FilterStatus());
 
-  FilterSidebar({super.key});
+@immutable
+class FilterStatus extends Equatable {
+  final bool engineers, designers, artists;
 
-  bool get filterActive => _status.filterActive;
+  const FilterStatus({
+    this.engineers = true,
+    this.designers = true,
+    this.artists = true,
+  });
 
-  List<Lecture> filterLectures() {
-    HashSet<Lecture> filteredLectures = HashSet();
-    for (Course course in courses) {
-      for (Lecture lecture in course.lectures) {
-        if (_status.engineers.value &&
-            course.audience.contains(Audience.engineer)) {
-          filteredLectures.add(lecture);
-        }
-        if (_status.designers.value &&
-            course.audience.contains(Audience.designer)) {
-          filteredLectures.add(lecture);
-        }
-        if (_status.artists.value &&
-            course.audience.contains(Audience.artist)) {
-          filteredLectures.add(lecture);
-        }
-      }
-    }
-    return filteredLectures.toList();
-  }
+  /// Whether any filters are active.
+  bool get filterActive => this != const FilterStatus(); //compare to default
 
   @override
-  State<FilterSidebar> createState() => _FilterSidebarState();
-}
+  //for the comparison in filterActive
+  List<Object?> get props => [
+        engineers,
+        designers,
+        artists,
+      ];
 
-class _FilterStatus {
-  _BoolWithDefault engineers = _BoolWithDefault(true);
-  _BoolWithDefault designers = _BoolWithDefault(true);
-  _BoolWithDefault artists = _BoolWithDefault(true);
-
-  bool get filterActive =>
-      !engineers.isDefault || !designers.isDefault || !artists.isDefault;
-
-  void reset() {
-    engineers.reset();
-    designers.reset();
-    artists.reset();
+  FilterStatus copyWith({
+    bool? engineers,
+    bool? designers,
+    bool? artists,
+  }) {
+    return FilterStatus(
+      engineers: engineers ?? this.engineers,
+      designers: designers ?? this.designers,
+      artists: artists ?? this.artists,
+    );
   }
 }
 
-class _BoolWithDefault {
-  bool value;
-  final bool _defaultValue;
-
-  _BoolWithDefault(this._defaultValue) : value = _defaultValue;
-
-  bool get isDefault => value == _defaultValue;
-
-  void reset() => value = _defaultValue;
-}
-
-class _FilterSidebarState extends State<FilterSidebar> {
-  _FilterStatus get status => widget._status;
+class FilterSidebar extends ConsumerWidget {
+  const FilterSidebar({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final FilterStatus status = ref.watch(filterStatusProvider);
+
     return Container(
       color: Theme.of(context).cardColor,
       width: 300,
@@ -86,7 +63,7 @@ class _FilterSidebarState extends State<FilterSidebar> {
               ),
               TextButton(
                 onPressed: status.filterActive
-                    ? () => setState(() => status.reset())
+                    ? () => ref.refresh(filterStatusProvider)
                     : null,
                 child: Text(
                   "Clear Filters",
@@ -107,26 +84,26 @@ class _FilterSidebarState extends State<FilterSidebar> {
                 CheckboxListTile(
                   title: const Text("Engineers", style: auto1NormalBody),
                   dense: true,
-                  value: status.engineers.value,
-                  onChanged: (bool? val) => setState(() {
-                    status.engineers.value = val!;
-                  }),
+                  value: status.engineers,
+                  onChanged: (bool? val) => ref
+                      .read(filterStatusProvider.notifier)
+                      .state = status.copyWith(engineers: val),
                 ),
                 CheckboxListTile(
                   title: const Text("Designers", style: auto1NormalBody),
                   dense: true,
-                  value: status.designers.value,
-                  onChanged: (bool? val) => setState(() {
-                    status.designers.value = val!;
-                  }),
+                  value: status.designers,
+                  onChanged: (bool? val) => ref
+                      .read(filterStatusProvider.notifier)
+                      .state = status.copyWith(designers: val),
                 ),
                 CheckboxListTile(
                   title: const Text("Artists", style: auto1NormalBody),
                   dense: true,
-                  value: status.artists.value,
-                  onChanged: (bool? val) => setState(() {
-                    status.artists.value = val!;
-                  }),
+                  value: status.artists,
+                  onChanged: (bool? val) => ref
+                      .read(filterStatusProvider.notifier)
+                      .state = status.copyWith(artists: val),
                 ),
               ],
             ),

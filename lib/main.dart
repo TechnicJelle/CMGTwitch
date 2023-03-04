@@ -1,6 +1,7 @@
 import "dart:typed_data";
 
 import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:flutter_svg/svg.dart";
 import "package:image_picker_web/image_picker_web.dart";
 
@@ -90,7 +91,7 @@ void main() {
     ),
   );
 
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

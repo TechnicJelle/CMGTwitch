@@ -1,46 +1,69 @@
+import "dart:collection";
+
 import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import "../main.dart";
 import "../lecture_db.dart";
+import "../models/audience.dart";
 import "../models/course.dart";
 import "../models/lecture.dart";
 import "../widgets/filter_sidebar.dart";
 import "../widgets/lecture_card.dart";
 
-class VOD extends StatefulWidget {
+class VOD extends ConsumerStatefulWidget {
   const VOD({super.key});
 
   @override
-  State<VOD> createState() => _VODState();
+  ConsumerState<VOD> createState() => _VODState();
 }
 
-class _VODState extends State<VOD> {
+class _VODState extends ConsumerState<VOD> {
   final TextEditingController _searchController = TextEditingController();
   bool _filterPanelExpanded = false;
-  final FilterSidebar _filterSidebar = FilterSidebar();
 
   @override
   Widget build(BuildContext context) {
+    final FilterStatus filterStatus = ref.watch(filterStatusProvider);
+
     return Row(
       children: [
         Expanded(
           child: Column(
             children: [
-              buildTopBar(),
+              buildTopBar(filterStatus),
               Flexible(
-                child: buildContent(),
+                child: buildContent(filterStatus),
               ),
             ],
           ),
         ),
-        if (_filterPanelExpanded) _filterSidebar,
+        if (_filterPanelExpanded) const FilterSidebar(),
       ],
     );
   }
 
-  Widget buildContent() {
-    if (_filterSidebar.filterActive) {
-      List<Lecture> filteredLectures = _filterSidebar.filterLectures();
+  static List<Lecture> filterLectures(FilterStatus status) {
+    HashSet<Lecture> filteredLectures = HashSet();
+    for (Course course in courses) {
+      for (Lecture lecture in course.lectures) {
+        if (status.engineers && course.audience.contains(Audience.engineer)) {
+          filteredLectures.add(lecture);
+        }
+        if (status.designers && course.audience.contains(Audience.designer)) {
+          filteredLectures.add(lecture);
+        }
+        if (status.artists && course.audience.contains(Audience.artist)) {
+          filteredLectures.add(lecture);
+        }
+      }
+    }
+    return filteredLectures.toList();
+  }
+
+  Widget buildContent(FilterStatus filterStatus) {
+    if (filterStatus.filterActive) {
+      List<Lecture> filteredLectures = filterLectures(filterStatus);
       if (filteredLectures.isEmpty) {
         return const Center(
           child: Text("No lectures found", style: auto1NormalBody),
@@ -103,7 +126,7 @@ class _VODState extends State<VOD> {
     );
   }
 
-  Widget buildTopBar() {
+  Widget buildTopBar(FilterStatus filterStatus) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
       child: Row(
@@ -148,13 +171,13 @@ class _VODState extends State<VOD> {
             width: 48,
             height: 48,
             child: Tooltip(
-              message: "Filter (${_filterSidebar.filterActive ? "On" : "Off"})",
+              message: "Filter (${filterStatus.filterActive ? "On" : "Off"})",
               child: RawMaterialButton(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
                 fillColor: Theme.of(context).cardColor,
-                child: _filterSidebar.filterActive
+                child: filterStatus.filterActive
                     ? const Icon(Icons.filter_alt)
                     : const Icon(Icons.filter_alt_off),
                 onPressed: () {
