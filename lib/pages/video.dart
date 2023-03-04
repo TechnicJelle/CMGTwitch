@@ -28,7 +28,6 @@ class _VideoPageState extends State<VideoPage> {
   final FocusNode _chatFocusNode = FocusNode();
   final TextEditingController _chatController = TextEditingController();
 
-  final ScrollController _chatScrollController = ScrollController();
   Timer? timer;
 
   @override
@@ -81,20 +80,11 @@ class _VideoPageState extends State<VideoPage> {
     flickManager.dispose();
     _chatController.dispose();
     _chatFocusNode.dispose();
-    _chatScrollController.dispose();
     timer?.cancel();
   }
 
   void sendChatMessage(ChatMessage message) {
-    setState(() {
-      lecture.chat.add(message);
-      if (_chatScrollController.position.maxScrollExtent -
-              _chatScrollController.offset <
-          100) {
-        _chatScrollController
-            .jumpTo(_chatScrollController.position.maxScrollExtent);
-      }
-    });
+    setState(() => lecture.chat.insert(0, message));
   }
 
   @override
@@ -177,7 +167,7 @@ class _VideoPageState extends State<VideoPage> {
             child: Material(
               type: MaterialType.transparency,
               child: ListView.separated(
-                controller: _chatScrollController,
+                reverse: true,
                 itemCount: chat.length,
                 itemBuilder: (context, index) {
                   ChatMessage msg = chat[index];
