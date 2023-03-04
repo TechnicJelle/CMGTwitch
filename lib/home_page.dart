@@ -1,12 +1,8 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:image_picker_web/image_picker_web.dart';
 
 import 'main.dart';
 import 'pages/schedule.dart';
 import 'pages/vod.dart';
-import '../lecture_db.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -47,25 +43,12 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: logoCMGTwitch(),
-        elevation: 8,
+      appBar: appBar(
+        setState,
         leading: IconButton(
           icon: const Icon(Icons.menu),
           onPressed: () => setState(() => _extended = !_extended),
         ),
-        actions: [
-          IconButton(
-            icon: you.avatar,
-            iconSize: 54,
-            onPressed: () async {
-              Uint8List? fromPicker = await ImagePickerWeb.getImageAsBytes();
-              if (fromPicker != null) {
-                setState(() => you.imgProv = MemoryImage(fromPicker));
-              }
-            },
-          ),
-        ],
       ),
       body: Row(
         children: [

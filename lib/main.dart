@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker_web/image_picker_web.dart';
 
 import 'home_page.dart';
 import 'lecture_db.dart';
@@ -42,11 +45,27 @@ const TextStyle auto1NormalBody = TextStyle(
   height: 1,
 );
 
-SvgPicture logoCMGTwitch() => SvgPicture.asset(
-      "assets/icons/CMGTwitch.svg",
-      semanticsLabel: "CMGTwitch",
-      height: 56 / 1.5,
-      placeholderBuilder: (_) => Image.asset("assets/icons/CMGTwitch.png"),
+AppBar appBar(StateSetter setState, {Widget? leading}) => AppBar(
+      title: SvgPicture.asset(
+        "assets/icons/CMGTwitch.svg",
+        semanticsLabel: "CMGTwitch",
+        height: 56 / 1.5,
+        placeholderBuilder: (_) => Image.asset("assets/icons/CMGTwitch.png"),
+      ),
+      elevation: 8,
+      leading: leading,
+      actions: [
+        IconButton(
+          icon: you.avatar,
+          iconSize: 54,
+          onPressed: () async {
+            Uint8List? fromPicker = await ImagePickerWeb.getImageAsBytes();
+            if (fromPicker != null) {
+              setState(() => you.imgProv = MemoryImage(fromPicker));
+            }
+          },
+        ),
+      ],
     );
 
 void main() {

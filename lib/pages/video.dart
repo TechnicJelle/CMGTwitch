@@ -100,10 +100,7 @@ class _VideoPageState extends State<VideoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: logoCMGTwitch(),
-        elevation: 8,
-      ),
+      appBar: appBar(setState),
       body: Row(
         children: [
           Flexible(
