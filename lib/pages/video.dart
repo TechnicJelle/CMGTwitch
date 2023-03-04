@@ -84,7 +84,7 @@ class _VideoPageState extends State<VideoPage> {
   }
 
   void sendChatMessage(ChatMessage message) {
-    setState(() => lecture.chat.insert(0, message));
+    setState(() => lecture.chat.add(message));
   }
 
   @override
@@ -150,7 +150,7 @@ class _VideoPageState extends State<VideoPage> {
   }
 
   Widget buildChatBox() {
-    List<ChatMessage> chat = lecture.chat;
+    List<ChatMessage> chat = lecture.chat.reversed.toList();
 
     return SizedBox(
       width: 400,
