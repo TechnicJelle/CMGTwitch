@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../main.dart';
@@ -14,5 +15,7 @@ class Person {
           backgroundColor: Colors.blue,
           child: Text(name[0], style: midnightKernboyHeaders),
         )
-      : CircleAvatar(backgroundImage: imgProv ?? NetworkImage(avatarUrl!));
+      : CircleAvatar(
+          backgroundImage: imgProv ?? CachedNetworkImageProvider(avatarUrl!),
+        );
 }

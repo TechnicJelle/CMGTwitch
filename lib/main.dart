@@ -55,15 +55,18 @@ AppBar appBar(StateSetter setState, {Widget? leading}) => AppBar(
       elevation: 8,
       leading: leading,
       actions: [
-        IconButton(
-          icon: you.avatar,
-          iconSize: 54,
-          onPressed: () async {
-            Uint8List? fromPicker = await ImagePickerWeb.getImageAsBytes();
-            if (fromPicker != null) {
-              setState(() => you.imgProv = MemoryImage(fromPicker));
-            }
-          },
+        MouseRegion(
+          onEnter: (_) => setState(() {}), //to refresh the icon if it's changed
+          child: IconButton(
+            icon: you.avatar,
+            iconSize: 54,
+            onPressed: () async {
+              Uint8List? fromPicker = await ImagePickerWeb.getImageAsBytes();
+              if (fromPicker != null) {
+                setState(() => you.imgProv = MemoryImage(fromPicker));
+              }
+            },
+          ),
         ),
       ],
     );
