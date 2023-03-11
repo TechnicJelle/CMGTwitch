@@ -11,39 +11,40 @@ import "../models/lecture.dart";
 import "../widgets/filter_sidebar.dart";
 import "../widgets/lecture_card.dart";
 
-class VOD extends ConsumerStatefulWidget {
+final _filterPanelExpandedProvider = StateProvider<bool>((ref) => false);
+
+class VOD extends ConsumerWidget {
   const VOD({super.key});
 
   @override
-  ConsumerState<VOD> createState() => _VODState();
-}
-
-class _VODState extends ConsumerState<VOD> {
-  final TextEditingController _searchController = TextEditingController();
-  bool _filterPanelExpanded = false;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final FilterStatus filterStatus = ref.watch(filterStatusProvider);
+    final bool filterPanelExpanded = ref.watch(_filterPanelExpandedProvider);
 
     return Row(
       children: [
         Expanded(
           child: Column(
             children: [
-              buildTopBar(filterStatus),
+              _TopBar(filterStatus),
               Flexible(
-                child: buildContent(filterStatus),
+                child: _Content(filterStatus),
               ),
             ],
           ),
         ),
-        if (_filterPanelExpanded) const FilterSidebar(),
+        if (filterPanelExpanded) const FilterSidebar(),
       ],
     );
   }
+}
 
-  static List<Lecture> filterLectures(FilterStatus status) {
+class _Content extends StatelessWidget {
+  final FilterStatus filterStatus;
+
+  const _Content(this.filterStatus);
+
+  static List<Lecture> _filterLectures(FilterStatus status) {
     HashSet<Lecture> filteredLectures = HashSet();
     for (Course course in courses) {
       for (Lecture lecture in course.lectures) {
@@ -61,16 +62,17 @@ class _VODState extends ConsumerState<VOD> {
     return filteredLectures.toList();
   }
 
-  Widget buildContent(FilterStatus filterStatus) {
+  @override
+  Widget build(BuildContext context) {
     if (filterStatus.filterActive) {
-      List<Lecture> filteredLectures = filterLectures(filterStatus);
+      List<Lecture> filteredLectures = _filterLectures(filterStatus);
       if (filteredLectures.isEmpty) {
         return const Center(
           child: Text("No lectures found", style: auto1NormalBody),
         );
       } else {
         return ListView(children: [
-          buildCustomListItem("Filter results", cyan, filteredLectures),
+          _Course("Filter results", cyan, filteredLectures),
         ]);
       }
     } else {
@@ -84,22 +86,27 @@ class _VODState extends ConsumerState<VOD> {
         itemBuilder: (context, index) {
           if (index == 0) {
             if (liveLectures.isEmpty) return Container();
-            return buildCustomListItem(
+            return _Course(
                 "> Live now!", const Color(0xFFFF0000), liveLectures);
           } else {
-            return buildCourse(courses[index - 1]);
+            Course c = courses[index - 1];
+            return _Course(c.name, c.colour, c.lectures);
           }
         },
       );
     }
   }
+}
 
-  Widget buildCourse(Course course) {
-    return buildCustomListItem(course.name, course.colour, course.lectures);
-  }
+class _Course extends StatelessWidget {
+  final String name;
+  final Color colour;
+  final List<Lecture> lectures;
 
-  Widget buildCustomListItem(
-      String name, Color colour, List<Lecture> lectures) {
+  const _Course(this.name, this.colour, this.lectures);
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -125,8 +132,29 @@ class _VODState extends ConsumerState<VOD> {
       ],
     );
   }
+}
 
-  Widget buildTopBar(FilterStatus filterStatus) {
+class _TopBar extends ConsumerStatefulWidget {
+  final FilterStatus filterStatus;
+
+  const _TopBar(this.filterStatus);
+
+  @override
+  ConsumerState<_TopBar> createState() => _TopBarState();
+}
+
+class _TopBarState extends ConsumerState<_TopBar> {
+  FilterStatus get filterStatus => widget.filterStatus;
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _searchController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
       child: Row(
@@ -181,7 +209,8 @@ class _VODState extends ConsumerState<VOD> {
                     ? const Icon(Icons.filter_alt)
                     : const Icon(Icons.filter_alt_off),
                 onPressed: () {
-                  setState(() => _filterPanelExpanded = !_filterPanelExpanded);
+                  ref.read(_filterPanelExpandedProvider.notifier).state =
+                      !ref.read(_filterPanelExpandedProvider);
                 },
               ),
             ),

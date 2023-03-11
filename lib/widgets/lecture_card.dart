@@ -30,12 +30,12 @@ class _LectureCardState extends State<LectureCard> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildThumbnail(),
+              _Thumbnail(lecture, _isHovering),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                child: buildTitle(),
+                child: _Title(lecture),
               ),
-              buildSpeakers(),
+              _Speakers(lecture),
             ],
           ),
           Positioned.fill(
@@ -52,8 +52,16 @@ class _LectureCardState extends State<LectureCard> {
       ),
     );
   }
+}
 
-  Widget buildThumbnail() => Stack(
+class _Thumbnail extends StatelessWidget {
+  final Lecture lecture;
+  final bool _isHovering;
+
+  const _Thumbnail(this.lecture, this._isHovering);
+
+  @override
+  Widget build(BuildContext context) => Stack(
         alignment: Alignment.center,
         children: [
           CachedNetworkImage(
@@ -76,7 +84,7 @@ class _LectureCardState extends State<LectureCard> {
               );
             },
             errorWidget: (context, String url, error) {
-              print(error);
+              debugPrint(error);
               return const SizedBox(
                 height: 280,
                 width: double.infinity,
@@ -118,8 +126,15 @@ class _LectureCardState extends State<LectureCard> {
           ),
         ],
       );
+}
 
-  Widget buildTitle() => Column(
+class _Title extends StatelessWidget {
+  final Lecture lecture;
+
+  const _Title(this.lecture);
+
+  @override
+  Widget build(BuildContext context) => Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -129,11 +144,18 @@ class _LectureCardState extends State<LectureCard> {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          if (lecture.tags.isNotEmpty) buildTags(),
+          if (lecture.tags.isNotEmpty) _Tags(lecture),
         ],
       );
+}
 
-  Widget buildTags() => Padding(
+class _Tags extends StatelessWidget {
+  final Lecture lecture;
+
+  const _Tags(this.lecture);
+
+  @override
+  Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.only(top: 4, bottom: 2),
         child: Wrap(
           spacing: 4,
@@ -147,20 +169,28 @@ class _LectureCardState extends State<LectureCard> {
           ],
         ),
       );
+}
 
-  Widget buildSpeakers() => Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: Wrap(
-        spacing: 4,
-        runSpacing: 4,
-        children: [
-          for (Person speaker in lecture.speakers)
-            Chip(
-              label: Text(speaker.name,
-                  style: auto1NormalBody.copyWith(color: white)),
-              backgroundColor: black.withOpacity(0.6),
-              avatar: speaker.avatar,
-            ),
-        ],
-      ));
+class _Speakers extends StatelessWidget {
+  final Lecture lecture;
+
+  const _Speakers(this.lecture);
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        child: Wrap(
+          spacing: 4,
+          runSpacing: 4,
+          children: [
+            for (Person speaker in lecture.speakers)
+              Chip(
+                label: Text(speaker.name,
+                    style: auto1NormalBody.copyWith(color: white)),
+                backgroundColor: black.withOpacity(0.6),
+                avatar: speaker.avatar,
+              ),
+          ],
+        ),
+      );
 }

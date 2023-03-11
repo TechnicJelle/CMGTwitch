@@ -32,7 +32,7 @@ class _VideoPageState extends ConsumerState<VideoPage> {
       ),
       autoPlay: false,
       onVideoEnd: () {
-        print("Video ended");
+        debugPrint("Video ended");
       },
       getPlayerControlsTimeout: (
           {errorInVideo, isPlaying, isVideoEnded, isVideoInitialized}) {
