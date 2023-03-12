@@ -1,14 +1,16 @@
 import "package:cached_network_image/cached_network_image.dart";
 import "package:flutter/material.dart";
 
+import "../models/audience.dart";
 import "../models/lecture.dart";
 import "../main.dart";
 import "../models/person.dart";
 
 class LectureCard extends StatefulWidget {
-  const LectureCard(this.lecture, {super.key});
-
   final Lecture lecture;
+  final List<Audience>? audience;
+
+  const LectureCard(this.lecture, {this.audience, super.key});
 
   @override
   State<LectureCard> createState() => _LectureCardState();
@@ -30,7 +32,7 @@ class _LectureCardState extends State<LectureCard> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _Thumbnail(lecture, _isHovering),
+              _Thumbnail(lecture, _isHovering, audience: widget.audience),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: _Title(lecture),
@@ -57,8 +59,9 @@ class _LectureCardState extends State<LectureCard> {
 class _Thumbnail extends StatelessWidget {
   final Lecture lecture;
   final bool _isHovering;
+  final List<Audience>? audience;
 
-  const _Thumbnail(this.lecture, this._isHovering);
+  const _Thumbnail(this.lecture, this._isHovering, {this.audience});
 
   @override
   Widget build(BuildContext context) => Stack(
@@ -92,13 +95,6 @@ class _Thumbnail extends StatelessWidget {
               );
             },
           ),
-          if (_isHovering)
-            const Icon(
-              Icons.play_circle_outline,
-              color: white,
-              shadows: [Shadow(color: black, blurRadius: 8)],
-              size: 48,
-            ),
           Positioned(
             bottom: 8,
             right: 8,
@@ -124,6 +120,27 @@ class _Thumbnail extends StatelessWidget {
               ),
             ),
           ),
+          if (audience != null)
+            Positioned(
+              bottom: 8,
+              left: 8,
+              child: Row(
+                children: [
+                  for (Audience audience in audience!)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: audience.icon,
+                    ),
+                ],
+              ),
+            ),
+          if (_isHovering)
+            const Icon(
+              Icons.play_circle_outline,
+              color: white,
+              shadows: [Shadow(color: black, blurRadius: 8)],
+              size: 48,
+            ),
         ],
       );
 }

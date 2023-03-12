@@ -90,7 +90,7 @@ class _Content extends StatelessWidget {
                 "> Live now!", const Color(0xFFFF0000), liveLectures);
           } else {
             Course c = courses[index - 1];
-            return _Course(c.name, c.colour, c.lectures);
+            return _Course(c.name, c.colour, c.lectures, audience: c.audience);
           }
         },
       );
@@ -102,8 +102,9 @@ class _Course extends StatelessWidget {
   final String name;
   final Color colour;
   final List<Lecture> lectures;
+  final List<Audience>? audience;
 
-  const _Course(this.name, this.colour, this.lectures);
+  const _Course(this.name, this.colour, this.lectures, {this.audience});
 
   @override
   Widget build(BuildContext context) {
@@ -111,12 +112,22 @@ class _Course extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 16),
-          child: Text(
-            name,
-            style: midnightKernboyTitles.copyWith(
-              color: colour,
-            ),
+          padding: const EdgeInsets.only(left: 16, top: 8),
+          child: Row(
+            children: [
+              Text(
+                name,
+                style: midnightKernboyTitles.copyWith(
+                  color: colour,
+                ),
+              ),
+              if (audience != null)
+                for (Audience a in audience!)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: a.icon,
+                  ),
+            ],
           ),
         ),
         Wrap(
@@ -125,10 +136,19 @@ class _Course extends StatelessWidget {
             for (int i = 0; i < lectures.length; i++)
               SizedBox(
                 width: 500,
-                child: LectureCard(lectures[i]),
+                child: LectureCard(
+                  lectures[i],
+                  audience: audience == null
+                      ? courses
+                          .where((c) => c.lectures.contains(lectures[i]))
+                          .first
+                          .audience //TODO: oof owie
+                      : null,
+                ),
               ),
           ],
         ),
+        const SizedBox(height: 32),
       ],
     );
   }
