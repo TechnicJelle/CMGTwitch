@@ -1,3 +1,5 @@
+import "dart:math";
+
 import "package:cached_network_image/cached_network_image.dart";
 import "package:flutter/material.dart";
 
@@ -34,10 +36,24 @@ class _LectureCardState extends State<LectureCard> {
             children: [
               _Thumbnail(lecture, _isHovering, audience: widget.audience),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                child: _Title(lecture),
+                padding: const EdgeInsets.fromLTRB(4, 6, 4, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _Title(lecture),
+                    const SizedBox(height: 4),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 6),
+                      child: _Speakers(lecture),
+                    ),
+                    if (lecture.tags.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 6),
+                        child: _Tags(lecture),
+                      ),
+                  ],
+                ),
               ),
-              _Speakers(lecture),
             ],
           ),
           Positioned.fill(
@@ -67,33 +83,36 @@ class _Thumbnail extends StatelessWidget {
   Widget build(BuildContext context) => Stack(
         alignment: Alignment.center,
         children: [
-          CachedNetworkImage(
-            imageUrl: "https://picsum.photos/seed/${lecture.hashCode}/800/450",
-            fit: BoxFit.cover,
-            fadeInDuration: const Duration(milliseconds: 200),
-            fadeOutDuration: const Duration(milliseconds: 100),
-            progressIndicatorBuilder: (context, String url, progress) {
-              return SizedBox(
-                height: 280,
-                width: double.infinity,
-                child: Center(
-                  child: SizedBox.square(
-                    dimension: 32,
-                    child: CircularProgressIndicator(
-                      value: progress.progress,
+          Hero(
+            tag: lecture.thumbnail + _unAlive(lecture),
+            child: CachedNetworkImage(
+              imageUrl: lecture.thumbnail,
+              fit: BoxFit.cover,
+              fadeInDuration: const Duration(milliseconds: 200),
+              fadeOutDuration: const Duration(milliseconds: 100),
+              progressIndicatorBuilder: (context, String url, progress) {
+                return SizedBox(
+                  height: 280,
+                  width: double.infinity,
+                  child: Center(
+                    child: SizedBox.square(
+                      dimension: 32,
+                      child: CircularProgressIndicator(
+                        value: progress.progress,
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
-            errorWidget: (context, String url, error) {
-              debugPrint(error);
-              return const SizedBox(
-                height: 280,
-                width: double.infinity,
-                child: Icon(Icons.error),
-              );
-            },
+                );
+              },
+              errorWidget: (context, String url, error) {
+                debugPrint(error);
+                return const SizedBox(
+                  height: 280,
+                  width: double.infinity,
+                  child: Icon(Icons.error),
+                );
+              },
+            ),
           ),
           Positioned(
             bottom: 8,
@@ -151,39 +170,16 @@ class _Title extends StatelessWidget {
   const _Title(this.lecture);
 
   @override
-  Widget build(BuildContext context) => Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
+  Widget build(BuildContext context) => Hero(
+        tag: lecture.title + _unAlive(lecture),
+        child: Material(
+          type: MaterialType.transparency,
+          child: Text(
             lecture.title,
             style: midnightKernboyHeaders,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          if (lecture.tags.isNotEmpty) _Tags(lecture),
-        ],
-      );
-}
-
-class _Tags extends StatelessWidget {
-  final Lecture lecture;
-
-  const _Tags(this.lecture);
-
-  @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(top: 4, bottom: 2),
-        child: Wrap(
-          spacing: 4,
-          runSpacing: 4,
-          children: [
-            for (String tag in lecture.tags)
-              Chip(
-                label: Text(tag, style: auto1NormalBody.copyWith(color: white)),
-                backgroundColor: black.withOpacity(0.6),
-              ),
-          ],
         ),
       );
 }
@@ -194,20 +190,43 @@ class _Speakers extends StatelessWidget {
   const _Speakers(this.lecture);
 
   @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        child: Wrap(
-          spacing: 4,
-          runSpacing: 4,
-          children: [
-            for (Person speaker in lecture.speakers)
-              Chip(
-                label: Text(speaker.name,
-                    style: auto1NormalBody.copyWith(color: white)),
-                backgroundColor: black.withOpacity(0.6),
-                avatar: speaker.avatar,
-              ),
-          ],
-        ),
+  Widget build(BuildContext context) => Wrap(
+        spacing: 4,
+        runSpacing: 4,
+        children: [
+          for (Person speaker in lecture.speakers)
+            Chip(
+              label: Text(speaker.name,
+                  style: auto1NormalBody.copyWith(color: white)),
+              backgroundColor: black.withOpacity(0.6),
+              avatar: speaker.avatar,
+            ),
+        ],
       );
 }
+
+class _Tags extends StatelessWidget {
+  final Lecture lecture;
+
+  const _Tags(this.lecture);
+
+  @override
+  Widget build(BuildContext context) => Wrap(
+        spacing: 4,
+        runSpacing: 4,
+        children: [
+          for (String tag in lecture.tags)
+            Chip(
+              label: Text(tag, style: auto1NormalBody.copyWith(color: white)),
+              backgroundColor: black.withOpacity(0.6),
+            ),
+        ],
+      );
+}
+
+//TODO: This is a hack to prevent the hero animation from playing on live lectures.
+// This is because live lectures are duplicated in the list, and the hero animation
+// is triggered by the same tag on both widgets, which of course breaks the Hero widget,
+// which only allows one hero per tag.
+String _unAlive(Lecture lecture) =>
+    (lecture.isLive ? Random().nextDouble().toString() : "");

@@ -1,5 +1,6 @@
 import "dart:html";
 
+import "package:cached_network_image/cached_network_image.dart";
 import "package:flick_video_player/flick_video_player.dart";
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
@@ -9,23 +10,62 @@ import "../main.dart";
 import "../models/lecture.dart";
 import "../widgets/chatbox.dart";
 
-class VideoPage extends ConsumerStatefulWidget {
+class VideoPage extends StatefulWidget {
   const VideoPage(this.lecture, {super.key});
 
   final Lecture lecture;
 
   @override
-  ConsumerState<VideoPage> createState() => _VideoPageState();
+  State<VideoPage> createState() => _VideoPageState();
 }
 
-class _VideoPageState extends ConsumerState<VideoPage> {
+class _VideoPageState extends State<VideoPage> {
   Lecture get lecture => widget.lecture;
 
-  late FlickManager flickManager;
-
   @override
-  void initState() {
-    super.initState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: appBar(setState),
+      body: Row(
+        children: [
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Flexible(
+                  child: _Video(lecture),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Hero(
+                    tag: lecture.title,
+                    child: Material(
+                      type: MaterialType.transparency,
+                      child: Text(
+                        lecture.title,
+                        style: midnightKernboyHeaders,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ),
+                // TODO: Description and more details stuff
+              ],
+            ),
+          ),
+          if (lecture.chat.isNotEmpty || lecture.isLive) Chatbox(lecture),
+        ],
+      ),
+    );
+  }
+}
+
+class _Video extends ConsumerWidget {
+  final Lecture lecture;
+  late final FlickManager flickManager;
+
+  _Video(this.lecture) {
     flickManager = FlickManager(
       videoPlayerController: VideoPlayerController.network(
         "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4",
@@ -45,72 +85,54 @@ class _VideoPageState extends ConsumerState<VideoPage> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    flickManager.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(setState),
-      body: Row(
-        children: [
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Flexible(
-                  child: FlickVideoPlayer(
-                    flickManager: flickManager,
-                    flickVideoWithControls: const FlickVideoWithControls(
-                      controls: FlickLandscapeControls(),
-                      videoFit: BoxFit.contain,
-                    ),
-                    webKeyDownHandler: (KeyboardEvent event, FlickManager mgr) {
-                      bool isChatboxFocused =
-                          ref.read(chatboxFocusStatusProvider);
-                      if (isChatboxFocused) return;
-
-                      const Duration sec10 = Duration(seconds: 10);
-                      if (event.keyCode == 70) {
-                        mgr.flickControlManager?.toggleFullscreen();
-                        mgr.flickDisplayManager?.handleShowPlayerControls();
-                      } else if (event.keyCode == 77) {
-                        mgr.flickControlManager?.toggleMute();
-                        mgr.flickDisplayManager?.handleShowPlayerControls();
-                      } else if (event.keyCode == 39) {
-                        mgr.flickControlManager?.seekForward(sec10);
-                        mgr.flickDisplayManager?.handleShowPlayerControls();
-                      } else if (event.keyCode == 37) {
-                        mgr.flickControlManager?.seekBackward(sec10);
-                        mgr.flickDisplayManager?.handleShowPlayerControls();
-                      } else if (event.keyCode == 32) {
-                        mgr.flickControlManager?.togglePlay();
-                        mgr.flickDisplayManager?.handleShowPlayerControls();
-                      } else if (event.keyCode == 38) {
-                        mgr.flickControlManager?.increaseVolume(0.05);
-                        mgr.flickDisplayManager?.handleShowPlayerControls();
-                      } else if (event.keyCode == 40) {
-                        mgr.flickControlManager?.decreaseVolume(0.05);
-                        mgr.flickDisplayManager?.handleShowPlayerControls();
-                      }
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    lecture.title,
-                    style: midnightKernboyHeaders,
-                  ),
-                ),
-              ],
-            ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Stack(
+      children: [
+        Hero(
+          tag: lecture.thumbnail,
+          child: CachedNetworkImage(
+            imageUrl: lecture.thumbnail,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
           ),
-          if (lecture.chat.isNotEmpty || lecture.isLive) Chatbox(lecture),
-        ],
-      ),
+        ),
+        FlickVideoPlayer(
+          flickManager: flickManager,
+          flickVideoWithControls: const FlickVideoWithControls(
+            controls: FlickLandscapeControls(),
+            videoFit: BoxFit.contain,
+          ),
+          webKeyDownHandler: (KeyboardEvent event, FlickManager manager) {
+            bool isChatboxFocused = ref.read(chatboxFocusStatusProvider);
+            if (isChatboxFocused) return;
+
+            const Duration sec10 = Duration(seconds: 10);
+            if (event.keyCode == 70) {
+              manager.flickControlManager?.toggleFullscreen();
+              manager.flickDisplayManager?.handleShowPlayerControls();
+            } else if (event.keyCode == 77) {
+              manager.flickControlManager?.toggleMute();
+              manager.flickDisplayManager?.handleShowPlayerControls();
+            } else if (event.keyCode == 39) {
+              manager.flickControlManager?.seekForward(sec10);
+              manager.flickDisplayManager?.handleShowPlayerControls();
+            } else if (event.keyCode == 37) {
+              manager.flickControlManager?.seekBackward(sec10);
+              manager.flickDisplayManager?.handleShowPlayerControls();
+            } else if (event.keyCode == 32) {
+              manager.flickControlManager?.togglePlay();
+              manager.flickDisplayManager?.handleShowPlayerControls();
+            } else if (event.keyCode == 38) {
+              manager.flickControlManager?.increaseVolume(0.05);
+              manager.flickDisplayManager?.handleShowPlayerControls();
+            } else if (event.keyCode == 40) {
+              manager.flickControlManager?.decreaseVolume(0.05);
+              manager.flickDisplayManager?.handleShowPlayerControls();
+            }
+          },
+        ),
+      ],
     );
   }
 }

@@ -34,13 +34,14 @@ class Lecture {
 
   String get durationString => formatDuration(endTime.difference(startTime));
 
+  String get thumbnail => "https://picsum.photos/seed/$hashCode/800/450";
+
   void watch(BuildContext context) {
     Navigator.of(context).push(PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => FadeTransition(
         opacity: animation,
         child: VideoPage(this),
       ),
-      transitionDuration: const Duration(milliseconds: 100),
     ));
   }
 }
