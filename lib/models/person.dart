@@ -18,4 +18,7 @@ class Person {
       : CircleAvatar(
           backgroundImage: imgProv ?? CachedNetworkImageProvider(avatarUrl!),
         );
+
+  @override
+  String toString() => name;
 }

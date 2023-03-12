@@ -12,6 +12,7 @@ import "../widgets/filter_sidebar.dart";
 import "../widgets/lecture_card.dart";
 
 final _filterPanelExpandedProvider = StateProvider<bool>((ref) => false);
+final _searchQueryProvider = StateProvider<String>((ref) => "");
 
 class VOD extends ConsumerWidget {
   const VOD({super.key});
@@ -39,7 +40,7 @@ class VOD extends ConsumerWidget {
   }
 }
 
-class _Content extends StatelessWidget {
+class _Content extends ConsumerWidget {
   final FilterStatus filterStatus;
 
   const _Content(this.filterStatus);
@@ -63,37 +64,62 @@ class _Content extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    if (filterStatus.filterActive) {
-      List<Lecture> filteredLectures = _filterLectures(filterStatus);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final String searchQuery = ref.watch(_searchQueryProvider);
+    if (searchQuery.isEmpty) {
+      if (filterStatus.filterActive) {
+        List<Lecture> filteredLectures = _filterLectures(filterStatus);
+        if (filteredLectures.isEmpty) {
+          return const Center(
+            child: Text("No lectures found", style: auto1NormalBody),
+          );
+        } else {
+          return ListView(children: [
+            _Course("Filter results", cyan, filteredLectures),
+          ]);
+        }
+      } else {
+        List<Lecture> liveLectures = courses
+            .expand((course) => course.lectures)
+            .where((lecture) => lecture.isLive)
+            .toList();
+
+        return ListView.builder(
+          itemCount: courses.length + 1,
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              if (liveLectures.isEmpty) return Container();
+              return _Course(
+                  "> Live now!", const Color(0xFFFF0000), liveLectures);
+            } else {
+              Course c = courses[index - 1];
+              return _Course(c.name, c.colour, c.lectures,
+                  audience: c.audience);
+            }
+          },
+        );
+      }
+    } else {
+      bool comp(String a, String b) =>
+          a.toLowerCase().contains(b.toLowerCase());
+      String fmt(List<dynamic> list) =>
+          list.toString().replaceAll(RegExp(r"[,\[\]]"), "");
+
+      List<Lecture> filteredLectures = _filterLectures(filterStatus)
+          .where((lecture) =>
+              comp(lecture.title, searchQuery) ||
+              comp(fmt(lecture.tags), searchQuery) ||
+              comp(fmt(lecture.speakers), searchQuery))
+          .toList();
       if (filteredLectures.isEmpty) {
         return const Center(
           child: Text("No lectures found", style: auto1NormalBody),
         );
       } else {
         return ListView(children: [
-          _Course("Filter results", cyan, filteredLectures),
+          _Course("Search results", cyan, filteredLectures),
         ]);
       }
-    } else {
-      List<Lecture> liveLectures = courses
-          .expand((course) => course.lectures)
-          .where((lecture) => lecture.isLive)
-          .toList();
-
-      return ListView.builder(
-        itemCount: courses.length + 1,
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            if (liveLectures.isEmpty) return Container();
-            return _Course(
-                "> Live now!", const Color(0xFFFF0000), liveLectures);
-          } else {
-            Course c = courses[index - 1];
-            return _Course(c.name, c.colour, c.lectures, audience: c.audience);
-          }
-        },
-      );
     }
   }
 }
@@ -240,5 +266,7 @@ class _TopBarState extends ConsumerState<_TopBar> {
     );
   }
 
-  void searchItems(String s) {}
+  void searchItems(String s) {
+    ref.read(_searchQueryProvider.notifier).state = s;
+  }
 }
