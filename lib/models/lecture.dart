@@ -27,10 +27,12 @@ class Lecture {
   String get time =>
       "${_timeFormHHmm.format(startTime)} - ${_timeFormHHmm.format(endTime)}";
 
-  String get duration {
-    Duration diff = endTime.difference(startTime);
-    return formatDuration(diff);
+  double get durationHours {
+    double minutes = endTime.difference(startTime).inMinutes.toDouble();
+    return minutes / 60;
   }
+
+  String get durationString => formatDuration(endTime.difference(startTime));
 
   void watch(BuildContext context) {
     Navigator.of(context).push(PageRouteBuilder(

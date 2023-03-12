@@ -113,7 +113,7 @@ class _Thumbnail extends StatelessWidget {
                         ],
                       )
                     : Text(
-                        lecture.duration,
+                        lecture.durationString,
                         style: auto1NormalBody.copyWith(color: white),
                       ),
                 backgroundColor: black.withOpacity(0.6),

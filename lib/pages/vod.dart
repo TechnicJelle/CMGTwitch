@@ -49,6 +49,8 @@ class _Content extends ConsumerWidget {
     HashSet<Lecture> filteredLectures = HashSet();
     for (Course course in courses) {
       for (Lecture lecture in course.lectures) {
+        if (!(lecture.durationHours >= status.duration.start &&
+            lecture.durationHours <= status.duration.end)) continue;
         if (status.engineers && course.audience.contains(Audience.engineer)) {
           filteredLectures.add(lecture);
         }
