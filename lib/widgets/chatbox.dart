@@ -72,7 +72,10 @@ class _ChatboxState extends ConsumerState<Chatbox> {
   }
 
   void sendChatMessage(ChatMessage message) {
-    setState(() => lecture.chat.add(message));
+    setState(() {
+      lecture.chat.add(message);
+      chat = lecture.chat.reversed.toList();
+    });
   }
 
   @override
