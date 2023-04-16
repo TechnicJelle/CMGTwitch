@@ -146,7 +146,7 @@ class _ScheduleAState extends State<ScheduleA> {
     final DateTime endTime = startTime.add(const Duration(hours: 2));
     meetings.add(
       _Meeting(
-        "Task: Go to the end of January and watch a lecture",
+        "Task 1 hint: It's around the beginning of February",
         Lecture("Not this lecture ;)", startTime, endTime, [you]),
         cyan,
       ),
