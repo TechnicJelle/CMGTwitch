@@ -14,7 +14,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool _extended = false;
-  int _selectedIndex = 1; // starting page
+  int _selectedIndex = 2; // starting page
 
   final List<NavigationRailDestination> _destinations = const [
     NavigationRailDestination(
