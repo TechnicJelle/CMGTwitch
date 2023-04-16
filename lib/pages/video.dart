@@ -107,9 +107,11 @@ class _Video extends ConsumerWidget {
       videoPlayerController: VideoPlayerController.network(
         "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4",
       ),
-      autoPlay: false,
+      autoPlay: lecture.isLive,
       onVideoEnd: () {
-        debugPrint("Video ended");
+        if (lecture.isLive) {
+          flickManager.flickControlManager?.replay();
+        }
       },
       getPlayerControlsTimeout: (
           {errorInVideo, isPlaying, isVideoEnded, isVideoInitialized}) {
