@@ -50,8 +50,7 @@ class _ChatboxState extends ConsumerState<Chatbox> {
       );
 
       timer = Timer(const Duration(seconds: 1), () {
-        sendChatMessage(
-            ChatMessage("Welcome to the lecture!", spammer, DateTime.now()));
+        sendChatMessage(ChatMessage("Hi there!", spammer, DateTime.now()));
         int count = 1;
         timer = Timer.periodic(const Duration(seconds: 6), (timer) {
           DateTime now = DateTime.now();

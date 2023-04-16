@@ -6,17 +6,17 @@ import "models/person.dart";
 
 Person you = Person("You");
 
-Person _john = Person(
-  "John",
+Person john = Person(
+  "John Doe",
   "https://media.discordapp.net/attachments/771451216499965953/1079147761410261234/fmsvan7jjxia1.jpg",
 );
-Person _claudia = Person("Claudia");
+Person _claudia = Person("Claudia Smith");
 Person _longJohn = Person("Long John");
 
 List<ChatMessage> _mockChat = [
   ChatMessage(
     "Hello!",
-    _john,
+    john,
     DateTime(2023, DateTime.january, 30, 9, 00, 00),
   ),
   ChatMessage(
@@ -26,7 +26,7 @@ List<ChatMessage> _mockChat = [
   ),
   ChatMessage(
     "How are you?",
-    _john,
+    john,
     DateTime(2023, DateTime.january, 30, 9, 00, 20),
   ),
   ChatMessage(
@@ -36,7 +36,7 @@ List<ChatMessage> _mockChat = [
   ),
   ChatMessage(
     "What are you doing?",
-    _john,
+    john,
     DateTime(2023, DateTime.january, 30, 9, 00, 40),
   ),
   ChatMessage(
@@ -46,7 +46,7 @@ List<ChatMessage> _mockChat = [
   ),
   ChatMessage(
     "Cool!",
-    _john,
+    john,
     DateTime(2023, DateTime.january, 30, 9, 00, 55),
   ),
   ChatMessage(
@@ -75,7 +75,7 @@ List<Course> courses = [
         "Lecture 1: Buttons and Navigation",
         DateTime(2023, DateTime.january, 30, 9, 00),
         DateTime(2023, DateTime.january, 30, 11, 00),
-        [_john],
+        [john],
         chat: _mockChat,
         tags: ["Buttons", "Navigation", "UI/UX"],
       ),
@@ -83,13 +83,13 @@ List<Course> courses = [
         "Lecture 2: How to make your UI look good",
         DateTime(2023, DateTime.february, 2, 11, 00),
         DateTime(2023, DateTime.february, 2, 13, 00),
-        [_john, _claudia],
+        [john, _claudia],
       ),
       Lecture(
         "Lecture 3: How to make your UI not look like a 90s website",
         DateTime(2023, DateTime.february, 6, 8, 30),
         DateTime(2023, DateTime.february, 6, 10, 30),
-        [_john],
+        [john],
       ),
     ],
   ),
@@ -101,13 +101,13 @@ List<Course> courses = [
         "Lec01: OpenGL and Shaders",
         DateTime(2023, DateTime.january, 31, 9, 00),
         DateTime(2023, DateTime.january, 31, 11, 00),
-        [_john],
+        [john],
       ),
       Lecture(
         "Lec02: Lighting and Shadows",
         DateTime(2023, DateTime.february, 6, 10, 30),
         DateTime(2023, DateTime.february, 6, 12, 30),
-        [_john],
+        [john],
       ),
     ],
   ),
@@ -119,19 +119,19 @@ List<Course> courses = [
         "Lecture 1: Where to put coins in your levels",
         DateTime(2023, DateTime.january, 31, 10, 00),
         DateTime(2023, DateTime.january, 31, 12, 00),
-        [_john],
+        [john],
       ),
       Lecture(
         "Lecture 2: How to design good levels and UI without looking like an absolute doofus",
         DateTime(2023, DateTime.february, 2, 10, 00),
         DateTime(2023, DateTime.february, 2, 12, 00),
-        [_john],
+        [john],
       ),
       Lecture(
         "Lecture 3: How to make your game look good with VFX",
         DateTime(2023, DateTime.february, 6, 11, 00),
         DateTime(2023, DateTime.february, 6, 12, 30),
-        [_john],
+        [john],
       ),
     ],
   ),
@@ -143,19 +143,19 @@ List<Course> courses = [
         "Lec1: Blender basics",
         DateTime(2023, DateTime.february, 1, 9, 00),
         DateTime(2023, DateTime.february, 1, 11, 00),
-        [_john],
+        [john],
       ),
       Lecture(
         "Lec2: Blender advanced",
         DateTime(2023, DateTime.february, 2, 9, 00),
         DateTime(2023, DateTime.february, 2, 11, 00),
-        [_john],
+        [john],
       ),
       Lecture(
         "Lec3: Blender compositing",
         DateTime(2023, DateTime.february, 6, 16, 00),
         DateTime(2023, DateTime.february, 6, 18, 00),
-        [_john],
+        [john],
       ),
     ],
   ),

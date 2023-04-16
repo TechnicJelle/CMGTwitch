@@ -83,10 +83,11 @@ void main() {
       "Lecture 4: Demonstration: How to make a Twitch/YouTube clone in Flutter",
       startTime,
       endTime,
-      [you],
+      [john],
       chat: [
         ChatMessage("This message was totally sent earlier", you, startTime),
         ChatMessage("..and so was this one", you, startTime),
+        ChatMessage("Welcome to the lecture!", john, startTime),
       ],
     ),
   );

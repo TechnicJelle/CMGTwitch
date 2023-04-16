@@ -40,16 +40,16 @@ class _LectureCardState extends State<LectureCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _Title(lecture),
+                    LectureTitle(lecture),
                     const SizedBox(height: 4),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 6),
-                      child: _Speakers(lecture),
+                      child: Speakers(lecture),
                     ),
                     if (lecture.tags.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.only(bottom: 6),
-                        child: _Tags(lecture),
+                        child: Tags(lecture),
                       ),
                   ],
                 ),
@@ -164,10 +164,10 @@ class _Thumbnail extends StatelessWidget {
       );
 }
 
-class _Title extends StatelessWidget {
+class LectureTitle extends StatelessWidget {
   final Lecture lecture;
 
-  const _Title(this.lecture);
+  const LectureTitle(this.lecture, {super.key});
 
   @override
   Widget build(BuildContext context) => Hero(
@@ -184,43 +184,56 @@ class _Title extends StatelessWidget {
       );
 }
 
-class _Speakers extends StatelessWidget {
+class Speakers extends StatelessWidget {
   final Lecture lecture;
 
-  const _Speakers(this.lecture);
+  const Speakers(this.lecture, {super.key});
 
   @override
-  Widget build(BuildContext context) => Wrap(
-        spacing: 4,
-        runSpacing: 4,
-        children: [
-          for (Person speaker in lecture.speakers)
-            Chip(
-              label: Text(speaker.name,
-                  style: auto1NormalBody.copyWith(color: white)),
-              backgroundColor: black.withOpacity(0.6),
-              avatar: speaker.avatar,
-            ),
-        ],
+  Widget build(BuildContext context) => Hero(
+        tag: lecture.speakers.hashCode.toString() + _unAlive(lecture),
+        child: Material(
+          type: MaterialType.transparency,
+          child: Wrap(
+            spacing: 4,
+            runSpacing: 4,
+            children: [
+              for (Person speaker in lecture.speakers)
+                Chip(
+                  label: Text(speaker.name,
+                      style: auto1NormalBody.copyWith(color: white)),
+                  backgroundColor: black.withOpacity(0.6),
+                  avatar: speaker.avatar,
+                ),
+            ],
+          ),
+        ),
       );
 }
 
-class _Tags extends StatelessWidget {
+class Tags extends StatelessWidget {
   final Lecture lecture;
 
-  const _Tags(this.lecture);
+  const Tags(this.lecture, {super.key});
 
   @override
-  Widget build(BuildContext context) => Wrap(
-        spacing: 4,
-        runSpacing: 4,
-        children: [
-          for (String tag in lecture.tags)
-            Chip(
-              label: Text(tag, style: auto1NormalBody.copyWith(color: white)),
-              backgroundColor: black.withOpacity(0.6),
-            ),
-        ],
+  Widget build(BuildContext context) => Hero(
+        tag: lecture.tags.hashCode.toString() + _unAlive(lecture),
+        child: Material(
+          type: MaterialType.transparency,
+          child: Wrap(
+            spacing: 4,
+            runSpacing: 4,
+            children: [
+              for (String tag in lecture.tags)
+                Chip(
+                  label:
+                      Text(tag, style: auto1NormalBody.copyWith(color: white)),
+                  backgroundColor: black.withOpacity(0.6),
+                ),
+            ],
+          ),
+        ),
       );
 }
 

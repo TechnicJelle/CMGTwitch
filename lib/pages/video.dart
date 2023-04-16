@@ -9,6 +9,7 @@ import "package:video_player/video_player.dart";
 import "../main.dart";
 import "../models/lecture.dart";
 import "../widgets/chatbox.dart";
+import "../widgets/lecture_card.dart";
 
 class VideoPage extends StatefulWidget {
   const VideoPage(this.lecture, {super.key});
@@ -21,6 +22,8 @@ class VideoPage extends StatefulWidget {
 
 class _VideoPageState extends State<VideoPage> {
   Lecture get lecture => widget.lecture;
+
+  bool _handRaised = false;
 
   @override
   Widget build(BuildContext context) {
@@ -35,22 +38,56 @@ class _VideoPageState extends State<VideoPage> {
                 Flexible(
                   child: _Video(lecture),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Hero(
-                    tag: lecture.title,
-                    child: Material(
-                      type: MaterialType.transparency,
-                      child: Text(
-                        lecture.title,
-                        style: midnightKernboyHeaders,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              LectureTitle(lecture),
+                              const SizedBox(height: 4),
+                              Speakers(lecture),
+                              const SizedBox(height: 4),
+                              const Text(
+                                "Description\n"
+                                "With multiple lines",
+                                style: auto1NormalBody,
+                              ),
+                              const SizedBox(height: 4),
+                              if (lecture.tags.isNotEmpty) Tags(lecture),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    if (lecture.isLive)
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _handRaised = !_handRaised;
+                          });
+                        },
+                        icon: Icon(
+                          _handRaised
+                              ? Icons.front_hand
+                              : Icons.front_hand_outlined,
+                          color: _handRaised ? red : null,
+                        ),
+                      )
+                  ],
                 ),
-                // TODO: Description and more details stuff
               ],
             ),
           ),
