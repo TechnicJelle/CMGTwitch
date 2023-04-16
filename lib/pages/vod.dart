@@ -166,12 +166,7 @@ class _Course extends StatelessWidget {
                 width: 500,
                 child: LectureCard(
                   lectures[i],
-                  audience: audience == null
-                      ? courses
-                          .where((c) => c.lectures.contains(lectures[i]))
-                          .first
-                          .audience //TODO: oof owie
-                      : null,
+                  audience: audience == null ? lectures[i].audience : null,
                 ),
               ),
           ],

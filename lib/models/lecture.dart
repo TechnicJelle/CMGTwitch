@@ -1,8 +1,11 @@
 import "package:flutter/material.dart";
 import "package:intl/intl.dart";
 
+import "../lecture_db.dart";
 import "../pages/video.dart";
 import "../models/chat_message.dart";
+import "audience.dart";
+import "course.dart";
 import "person.dart";
 
 DateFormat _timeFormHHmm = DateFormat("HH:mm");
@@ -35,6 +38,11 @@ class Lecture {
   String get durationString => formatDuration(endTime.difference(startTime));
 
   String get thumbnail => "https://picsum.photos/seed/$hashCode/800/450";
+
+  Course get course =>
+      courses.firstWhere((c) => c.lectures.contains(this)); //TODO: oof owie
+
+  List<Audience> get audience => course.audience;
 
   void watch(BuildContext context) {
     Navigator.of(context).push(PageRouteBuilder(

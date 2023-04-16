@@ -6,14 +6,14 @@ import "../main.dart";
 import "../models/course.dart";
 import "../models/lecture.dart";
 
-class Schedule extends StatefulWidget {
-  const Schedule({super.key});
+class ScheduleA extends StatefulWidget {
+  const ScheduleA({super.key});
 
   @override
-  State<Schedule> createState() => _ScheduleState();
+  State<ScheduleA> createState() => _ScheduleAState();
 }
 
-class _ScheduleState extends State<Schedule> {
+class _ScheduleAState extends State<ScheduleA> {
   final TextStyle monthNonDays = auto1NormalBody.copyWith(
     color: auto1NormalBody.color?.withOpacity(0.4),
   );

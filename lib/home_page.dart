@@ -1,7 +1,8 @@
 import "package:flutter/material.dart";
 
 import "main.dart";
-import "pages/schedule.dart";
+import "pages/schedule_a.dart";
+import "pages/schedule_b.dart";
 import "pages/vod.dart";
 
 class MyHomePage extends StatefulWidget {
@@ -18,7 +19,11 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<NavigationRailDestination> _destinations = const [
     NavigationRailDestination(
       icon: Icon(Icons.calendar_month),
-      label: Text("Scheduled Lectures"),
+      label: Text("Scheduled Lectures A"),
+    ),
+    NavigationRailDestination(
+      icon: Icon(Icons.list_alt),
+      label: Text("Scheduled Lectures B"),
     ),
     NavigationRailDestination(
       icon: Icon(Icons.ondemand_video),
@@ -31,9 +36,14 @@ class _MyHomePageState extends State<MyHomePage> {
       case 0:
         return const Padding(
           padding: EdgeInsets.only(top: 8.0),
-          child: Schedule(),
+          child: ScheduleA(),
         );
       case 1:
+        return Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: ScheduleB(),
+        );
+      case 2:
         return const VOD();
       default:
         return const Placeholder();
