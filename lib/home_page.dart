@@ -13,15 +13,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool get _isLimited => version.contains("A") || version.contains("B");
-
   bool _extended = false;
   int _selectedIndex = 2; // starting page
 
   final List<NavigationRailDestination> _destinations = [
-    const NavigationRailDestination(
-      icon: Icon(Icons.calendar_month),
-      label: Text("Scheduled Lectures A"),
+    NavigationRailDestination(
+      icon: const Icon(Icons.calendar_month),
+      label: Text("Scheduled Lectures${isLimited ? "" : " A"}"),
     ),
     const NavigationRailDestination(
       icon: Icon(Icons.list_alt),
@@ -34,7 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
 
   Widget get _currentPage {
-    if (_isLimited) {
+    if (isLimited) {
       //0 is A or B
       //1 is VOD
       switch (_selectedIndex) {
@@ -72,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    if (_isLimited) {
+    if (isLimited) {
       _destinations.removeAt(1);
       _selectedIndex--;
     }

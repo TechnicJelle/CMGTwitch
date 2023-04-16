@@ -75,6 +75,8 @@ AppBar appBar(StateSetter setState, {Widget? leading}) => AppBar(
 
 String version = "";
 
+bool get isLimited => version.contains("A") || version.contains("B");
+
 void main() {
   //Always have a live lecture
   final DateTime now = DateTime.now();
