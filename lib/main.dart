@@ -4,6 +4,7 @@ import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:flutter_svg/svg.dart";
 import "package:image_picker_web/image_picker_web.dart";
+import "package:flutter_web_plugins/url_strategy.dart";
 
 import "home_page.dart";
 import "lecture_db.dart";
@@ -72,6 +73,8 @@ AppBar appBar(StateSetter setState, {Widget? leading}) => AppBar(
       ],
     );
 
+String version = "";
+
 void main() {
   //Always have a live lecture
   final DateTime now = DateTime.now();
@@ -92,6 +95,7 @@ void main() {
     ),
   );
 
+  usePathUrlStrategy();
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -102,6 +106,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "CMGTwitch",
+      onGenerateRoute: (settings) {
+        version = settings.name ?? "";
+        return null;
+      },
       theme: ThemeData.dark().copyWith(
         colorScheme: const ColorScheme.dark().copyWith(
           primary: purple, //TextField Outline

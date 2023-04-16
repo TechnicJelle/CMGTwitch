@@ -13,25 +13,43 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool get _isLimited => version.contains("A") || version.contains("B");
+
   bool _extended = false;
   int _selectedIndex = 2; // starting page
 
-  final List<NavigationRailDestination> _destinations = const [
-    NavigationRailDestination(
+  final List<NavigationRailDestination> _destinations = [
+    const NavigationRailDestination(
       icon: Icon(Icons.calendar_month),
       label: Text("Scheduled Lectures A"),
     ),
-    NavigationRailDestination(
+    const NavigationRailDestination(
       icon: Icon(Icons.list_alt),
       label: Text("Scheduled Lectures B"),
     ),
-    NavigationRailDestination(
+    const NavigationRailDestination(
       icon: Icon(Icons.ondemand_video),
       label: Text("VOD Lectures"),
     ),
   ];
 
   Widget get _currentPage {
+    if (_isLimited) {
+      //0 is A or B
+      //1 is VOD
+      switch (_selectedIndex) {
+        case 0:
+          return Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: version.contains("A") ? const ScheduleA() : ScheduleB(),
+          );
+        case 1:
+          return const VOD();
+        default:
+          return const Placeholder();
+      }
+    }
+
     switch (_selectedIndex) {
       case 0:
         return const Padding(
@@ -47,6 +65,16 @@ class _MyHomePageState extends State<MyHomePage> {
         return const VOD();
       default:
         return const Placeholder();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (_isLimited) {
+      _destinations.removeAt(1);
+      _selectedIndex--;
     }
   }
 
