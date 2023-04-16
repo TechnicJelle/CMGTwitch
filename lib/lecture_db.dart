@@ -226,13 +226,13 @@ List<Course> courses = [
         "Lec4: Blender sculpting",
         DateTime(2023, DateTime.february, 22, 11, 00),
         DateTime(2023, DateTime.february, 22, 13, 00),
+        chat: _mockChat,
         [john],
       ),
       Lecture(
         "Lec5: Blender animation",
         DateTime(2023, DateTime.february, 8, 14, 00),
         DateTime(2023, DateTime.february, 8, 16, 30),
-        chat: _mockChat,
         [john],
       ),
       Lecture(
