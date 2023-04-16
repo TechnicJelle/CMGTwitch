@@ -8,8 +8,8 @@ Person you = Person("You");
 
 Person john = Person(
   "John Doe",
-  "https://media.discordapp.net/attachments/771451216499965953/1079147761410261234/fmsvan7jjxia1.jpg",
-);
+  "https://upload.wikimedia.org/wikipedia/commons/4/45/Mainecoon-lap.jpg",
+); //Source: https://commons.wikimedia.org/wiki/File:Mainecoon-lap.jpg
 Person _claudia = Person("Claudia Smith");
 Person _longJohn = Person("Long John");
 
