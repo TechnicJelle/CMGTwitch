@@ -191,6 +191,17 @@ class _TopBarState extends ConsumerState<_TopBar> {
   final TextEditingController _searchController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    resetSearch();
+  }
+
+  void resetSearch() async {
+    await Future.delayed(const Duration(milliseconds: 100));
+    searchItems("");
+  }
+
+  @override
   void dispose() {
     super.dispose();
     _searchController.dispose();
